@@ -1,20 +1,41 @@
-﻿
+﻿using System.Text;
+
 namespace Kata.Tests.Domain
 {
     public class Numerals
     {
-        public static string ToRoman(int arabic)
+        private static readonly Dictionary<int, string> RomanConvertionRules = new()
         {
-            if (arabic <= 3)
-                return new string('I', arabic);
+            {1000, "M"}, {900, "CM"}, {500, "D"}, {400, "CD"},
+            {100, "C"}, {90, "XC"}, {50, "L"}, {40, "XL"},
+            {10, "X"}, {9, "IX"}, {5, "V"}, {4, "IV"},
+            {1, "I"}
+        };
 
-            if (arabic == 4)
-                return "IV";
+        public static string ToRomanRecursive(int arabic)
+        {
+            if(arabic <= 0)
+                return string.Empty;
 
-            if (arabic == 5)
-                return "V";
+            var floorEntry = RomanConvertionRules.First(rule => rule.Key <= arabic);
 
-            return string.Empty;
+            return floorEntry.Value + ToRomanRecursive(arabic - floorEntry.Key);
+        }
+
+        public static string ToRomanDeclarative(int arabic)
+        {
+            var result = new StringBuilder();
+
+            foreach (var (value, symbol) in RomanConvertionRules)
+            {
+                while (arabic >= value)
+                {
+                    result.Append(symbol);
+                    arabic -= value;
+                }
+            }
+
+            return result.ToString();
         }
     }
 }
