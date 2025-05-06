@@ -7,16 +7,14 @@ Chaque kata est structuré de manière indépendante, avec son code de productio
 
 ## ✅ Katas disponibles
 
-### 1. [FizzBuzz](./FizzBuzz/)
+### 1. [FizzBuzz](./Kata.Tests/FizzBuzz/)
 
-### 2. [FooBarQix](./FooBarQix/)
+### 2. [FooBarQix](./Kata.Tests/FooBarQix/)
 
-### 3. [RomanNumerals](./RomanNumerals/)
+### 3. [RomanNumerals](./Kata.Tests/RomanNumerals/)
 Comprend plusieurs approches :
 - Solution itérative
 - Solution récursive
-- Solution déclarative (basée sur LINQ)
-- Solution de style fonctionnel pur
 
 ---
 
