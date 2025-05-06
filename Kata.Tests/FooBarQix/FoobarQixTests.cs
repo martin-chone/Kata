@@ -1,6 +1,4 @@
-﻿using Kata.Tests.Domain;
-
-namespace Kata.Tests
+﻿namespace Kata.Tests.FooBarQix
 {
     public class FoobarQixTests
     {

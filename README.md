@@ -7,11 +7,11 @@ Chaque kata est structuré de manière indépendante, avec son code de productio
 
 ## ✅ Katas disponibles
 
-### 1. [FizzBuzz]
+### 1. [FizzBuzz](./FizzBuzz/)
 
-### 2. [FooBarQix]
+### 2. [FooBarQix](./FooBarQix/)
 
-### 3. [RomanNumerals]
+### 3. [RomanNumerals](./RomanNumerals/)
 Comprend plusieurs approches :
 - Solution itérative
 - Solution récursive

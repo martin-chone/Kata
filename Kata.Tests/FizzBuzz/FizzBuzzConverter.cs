@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Kata.Tests.Domain
+namespace Kata.Tests.FizzBuzz
 {
     internal class FizzBuzzConverter
     {
