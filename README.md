@@ -16,6 +16,8 @@ Comprend plusieurs approches :
 - Solution itérative
 - Solution récursive
 
+### 3. [Tennis](./Kata.Tests/Tennis/)
+
 ---
 
 ## 🧪 Approche TDD
