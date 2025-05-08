@@ -1,8 +1,4 @@
-﻿
-using System.Data;
-using System.Text;
-
-namespace Kata.Tests.Tennis
+﻿namespace Kata.Tests.Tennis
 {
     public class Score
     {
@@ -10,6 +6,9 @@ namespace Kata.Tests.Tennis
         public int ReceiverPoints { get; private set; }
 
         private readonly Dictionary<int, string> PointRules;
+
+        private readonly int MaxPointValue;
+        private readonly string MaxPointLabel;
 
         public Score(int serverPoints, int receiverPoints)
         {
@@ -22,6 +21,9 @@ namespace Kata.Tests.Tennis
                 { 2, "30" },
                 { 3, "40" }
             };
+
+            MaxPointValue = PointRules.Keys.Max();
+            MaxPointLabel = PointRules[MaxPointValue];
         }
 
         public void AddPointToServer() => ServerPoints++;
@@ -30,78 +32,40 @@ namespace Kata.Tests.Tennis
 
         public string GetScoreDisplay() 
         {
-            var result = new StringBuilder();
-
-            var maxPointValue = PointRules.Max(rule => rule.Key);
-            var maxPointResult = PointRules.Max(rule => rule.Value);
-
-            if (ServerPoints >= maxPointValue &&  ReceiverPoints >= maxPointValue)
+            if (IsDeuceOrBeyond())
             {
-                if (ServerPoints == ReceiverPoints)
-                {
-                    result.Append(maxPointResult);
-                    result.Append("A");
-                    return result.ToString();
-                }
-                if(ServerPoints == ReceiverPoints + 1)
-                {
-                    result.Append("Advantage");
-                    result.Append("-");
-                    result.Append(maxPointResult);
-                    return result.ToString();
-                }
-                if (ReceiverPoints == ServerPoints + 1)
-                {
-                    result.Append(maxPointResult);
-                    result.Append("-");
-                    result.Append("Advantage");
-                    return result.ToString();
-                }
-                if (ServerPoints > ReceiverPoints + 1)
-                {
-                    result.Append("Winner");
-                    result.Append("-");
-                    result.Append(maxPointResult);
-                    return result.ToString();
-                }
-                if (ReceiverPoints > ServerPoints + 1)
-                {
-                    result.Append(maxPointResult);
-                    result.Append("-");
-                    result.Append("Winner");
-                    return result.ToString();
-                }
+                if (ServerPoints == ReceiverPoints) return GetEqualScoreDisplay();
+                if (ServerPoints == ReceiverPoints + 1) return GetAdvantageDisplay(true);
+                if (ReceiverPoints == ServerPoints + 1) return GetAdvantageDisplay(false);
             }
 
-            var serverPointResult = PointRules.TryGetValue(ServerPoints, out var value)
-                    ? value
-                    : PointRules.Max(rule => rule.Value);
+            if (ServerHasWon()) return GetWinnerDisplay(true);
+            if (ReceiverHasWon()) return GetWinnerDisplay(false);
 
-            var receiverPointResult = PointRules.TryGetValue(ReceiverPoints, out value)
-                    ? value
-                    : PointRules.Max(rule => rule.Value);
-
-            if (ServerPoints > maxPointValue)
-            {
-                result.Append("Winner");
-                result.Append("-");
-                result.Append(receiverPointResult);
-                return result.ToString();
-            }
-            if (ReceiverPoints > maxPointValue)
-            {
-                result.Append(serverPointResult);
-                result.Append("-");
-                result.Append("Winner");
-                return result.ToString();
-            }
-
-            result.Append(serverPointResult);
-            result.Append("-");
-            result.Append(receiverPointResult);
-
-            return result.ToString();
+            return $"{GetPointDisplay(ServerPoints)}-{GetPointDisplay(ReceiverPoints)}";
         }
+
+        private bool IsDeuceOrBeyond() =>
+            ServerPoints >= MaxPointValue && ReceiverPoints >= MaxPointValue;
+
+        private bool ServerHasWon() =>
+            ServerPoints >= MaxPointValue + 1 && ServerPoints >= ReceiverPoints + 2;
+
+        private bool ReceiverHasWon() =>
+            ReceiverPoints >= MaxPointValue + 1 && ReceiverPoints >= ServerPoints + 2;
+
+        private string GetEqualScoreDisplay() => $"{MaxPointLabel}A";
+
+        private string GetAdvantageDisplay(bool serverHasAdvantage)
+            => serverHasAdvantage ? $"Advantage-{MaxPointLabel}" : $"{MaxPointLabel}-Advantage";
+
+        private string GetWinnerDisplay(bool serverWins) 
+            => serverWins 
+            ? $"Winner-{GetPointDisplay(ReceiverPoints)}" 
+            : $"{GetPointDisplay(ServerPoints)}-Winner";
+
+        private string GetPointDisplay(int points)
+            => PointRules.TryGetValue(points, out var label) ? label : MaxPointLabel;
     }
 
     
