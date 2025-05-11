@@ -16,7 +16,9 @@ Comprend plusieurs approches :
 - Solution itérative
 - Solution récursive
 
-### 3. [Tennis](./Kata.Tests/Tennis/)
+### 4. [Tennis](./Kata.Tests/Tennis/)
+
+### 5. [BugsZero](./Kata.Tests/BugsZero/)
 
 ---
 
