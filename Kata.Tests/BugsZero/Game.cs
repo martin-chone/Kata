@@ -40,10 +40,8 @@
             return (HowManyPlayers() >= 2);
         }
 
-        public bool Add(String playerName)
+        public void AddPlayer(String playerName)
         {
-
-
             players.Add(playerName);
             places[HowManyPlayers()] = 0;
             purses[HowManyPlayers()] = 0;
@@ -51,7 +49,6 @@
 
             Console.WriteLine(playerName + " was Added");
             Console.WriteLine("They are player number " + players.Count);
-            return true;
         }
 
         public int HowManyPlayers()
