@@ -2,8 +2,6 @@
 {
     public class Game
     {
-
-
         List<string> players = new List<string>();
 
         int[] places = new int[6];
@@ -19,15 +17,36 @@
         int currentPlayer = 0;
         bool isGettingOutOfPenaltyBox;
 
+        private string[] Categories;
+        private Dictionary<string, LinkedList<string>> QuestionBanks;
+
         public Game()
+        {
+            InitializeQuestions();
+            InitializeCategoriesAndQuestionBanks();
+        }
+
+        private void InitializeQuestions()
         {
             for (int i = 0; i < 50; i++)
             {
                 popQuestions.AddLast("Pop Question " + i);
-                scienceQuestions.AddLast(("Science Question " + i));
-                sportsQuestions.AddLast(("Sports Question " + i));
+                scienceQuestions.AddLast("Science Question " + i);
+                sportsQuestions.AddLast("Sports Question " + i);
                 rockQuestions.AddLast(CreateRockQuestion(i));
             }
+        }
+
+        private void InitializeCategoriesAndQuestionBanks()
+        {
+            Categories = new string[] { "Pop", "Science", "Sports", "Rock" };
+            QuestionBanks = new Dictionary<string, LinkedList<string>>()
+            {
+                { "Pop", popQuestions },
+                { "Science", scienceQuestions },
+                { "Sports", sportsQuestions },
+                { "Rock", rockQuestions },
+            };
         }
 
         public String CreateRockQuestion(int index)
@@ -101,41 +120,22 @@
 
         private void AskQuestion()
         {
-            if (CurrentCategory() == "Pop")
+            var questionCategory = CurrentCategory();
+
+            if(QuestionBanks.TryGetValue(questionCategory, out var questions))
             {
-                Console.WriteLine(popQuestions.First());
-                popQuestions.RemoveFirst();
-            }
-            if (CurrentCategory() == "Science")
-            {
-                Console.WriteLine(scienceQuestions.First());
-                scienceQuestions.RemoveFirst();
-            }
-            if (CurrentCategory() == "Sports")
-            {
-                Console.WriteLine(sportsQuestions.First());
-                sportsQuestions.RemoveFirst();
-            }
-            if (CurrentCategory() == "Rock")
-            {
-                Console.WriteLine(rockQuestions.First());
-                rockQuestions.RemoveFirst();
+                Console.WriteLine(questions.First());
+                questions.RemoveFirst();
             }
         }
 
 
         private String CurrentCategory()
         {
-            if (places[currentPlayer] == 0) return "Pop";
-            if (places[currentPlayer] == 4) return "Pop";
-            if (places[currentPlayer] == 8) return "Pop";
-            if (places[currentPlayer] == 1) return "Science";
-            if (places[currentPlayer] == 5) return "Science";
-            if (places[currentPlayer] == 9) return "Science";
-            if (places[currentPlayer] == 2) return "Sports";
-            if (places[currentPlayer] == 6) return "Sports";
-            if (places[currentPlayer] == 10) return "Sports";
-            return "Rock";
+            var position = places[currentPlayer];
+
+            return Categories[position % Categories.Length];
+            
         }
 
         public bool WasCorrectlyAnswered()
