@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
+	<StartupObject>Kata.Tests.BugsZero.GameRunner</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
