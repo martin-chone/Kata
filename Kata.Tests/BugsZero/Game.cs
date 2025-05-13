@@ -9,11 +9,6 @@
 
         bool[] inPenaltyBox = new bool[6];
 
-        LinkedList<string> popQuestions = new LinkedList<string>();
-        LinkedList<string> scienceQuestions = new LinkedList<string>();
-        LinkedList<string> sportsQuestions = new LinkedList<string>();
-        LinkedList<string> rockQuestions = new LinkedList<string>();
-
         int currentPlayer = 0;
         bool isGettingOutOfPenaltyBox;
 
@@ -22,36 +17,24 @@
 
         public Game()
         {
-            InitializeQuestions();
             InitializeCategoriesAndQuestionBanks();
-        }
-
-        private void InitializeQuestions()
-        {
-            for (int i = 0; i < 50; i++)
-            {
-                popQuestions.AddLast("Pop Question " + i);
-                scienceQuestions.AddLast("Science Question " + i);
-                sportsQuestions.AddLast("Sports Question " + i);
-                rockQuestions.AddLast(CreateRockQuestion(i));
-            }
         }
 
         private void InitializeCategoriesAndQuestionBanks()
         {
             Categories = new string[] { "Pop", "Science", "Sports", "Rock" };
-            QuestionBanks = new Dictionary<string, LinkedList<string>>()
-            {
-                { "Pop", popQuestions },
-                { "Science", scienceQuestions },
-                { "Sports", sportsQuestions },
-                { "Rock", rockQuestions },
-            };
-        }
+            QuestionBanks = Categories.ToDictionary(
+                category => category, 
+                category => new LinkedList<string>());
 
-        public String CreateRockQuestion(int index)
-        {
-            return "Rock Question " + index;
+            for (int i = 0; i < 50; i++)
+            {
+                foreach (string category in Categories)
+                {
+                    var question = $"{category} Question {i}";
+                    QuestionBanks[category].AddLast(question);
+                }
+            }
         }
 
         public bool IsPlayable()
