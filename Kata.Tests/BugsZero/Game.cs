@@ -42,7 +42,8 @@
             {
                 foreach (Category category in Categories)
                 {
-                    var question = $"{category.Name} Question {i}";
+                    var questionText = $"{category.Name} Question {i}";
+                    var question = new Question(questionText);
                     QuestionBanks[category].Add(question);
                 }
             }
@@ -122,7 +123,8 @@
 
             if(QuestionBanks.TryGetValue(category, out var questionBank))
             {
-                Console.WriteLine(questionBank.Next());
+                var questionText = questionBank.Next().Text;
+                Console.WriteLine(questionText);
                 questionBank.Remove();
             }
         }

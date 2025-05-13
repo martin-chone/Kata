@@ -4,11 +4,11 @@ namespace Kata.Tests.BugsZero
 {
     public class QuestionBank
     {
-        private readonly LinkedList<string> _questions = new();
+        private readonly LinkedList<Question> _questions = new();
 
-        public void Add(string question) => _questions.AddLast(question);
+        public void Add(Question question) => _questions.AddLast(question);
 
-        public string Next() => _questions.First();
+        public Question Next() => _questions.First();
 
         public void Remove() => _questions.RemoveFirst();
     }
