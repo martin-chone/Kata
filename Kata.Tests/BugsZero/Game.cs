@@ -12,27 +12,38 @@
         int currentPlayer = 0;
         bool isGettingOutOfPenaltyBox;
 
-        private string[] Categories;
-        private Dictionary<string, LinkedList<string>> QuestionBanks;
+        private IList<Category> Categories;
+        private Dictionary<Category, QuestionBank> QuestionBanks;
 
         public Game()
         {
-            InitializeCategoriesAndQuestionBanks();
+            InitializeCategories();
+            InitializeQuestionsByCategory();
         }
 
-        private void InitializeCategoriesAndQuestionBanks()
+        private void InitializeCategories()
         {
-            Categories = new string[] { "Pop", "Science", "Sports", "Rock" };
+            Categories = new List<Category>
+            {
+                new("Pop"),
+                new("Science"),
+                new("Sports"),
+                new("Rock")
+            };
+        }
+
+        private void InitializeQuestionsByCategory()
+        {
             QuestionBanks = Categories.ToDictionary(
                 category => category, 
-                category => new LinkedList<string>());
+                category => new QuestionBank());
 
             for (int i = 0; i < 50; i++)
             {
-                foreach (string category in Categories)
+                foreach (Category category in Categories)
                 {
-                    var question = $"{category} Question {i}";
-                    QuestionBanks[category].AddLast(question);
+                    var question = $"{category.Name} Question {i}";
+                    QuestionBanks[category].Add(question);
                 }
             }
         }
@@ -73,10 +84,12 @@
                     places[currentPlayer] = places[currentPlayer] + roll;
                     if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
 
+                    var category = CurrentCategory();
+
                     Console.WriteLine(players[currentPlayer]
                             + "'s new location is "
                             + places[currentPlayer]);
-                    Console.WriteLine("The category is " + CurrentCategory());
+                    Console.WriteLine("The category is " + category.Name);
                     AskQuestion();
                 }
                 else
@@ -92,10 +105,12 @@
                 places[currentPlayer] = places[currentPlayer] + roll;
                 if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
 
+                var category = CurrentCategory();
+
                 Console.WriteLine(players[currentPlayer]
                         + "'s new location is "
                         + places[currentPlayer]);
-                Console.WriteLine("The category is " + CurrentCategory());
+                Console.WriteLine("The category is " + category.Name);
                 AskQuestion();
             }
 
@@ -103,21 +118,20 @@
 
         private void AskQuestion()
         {
-            var questionCategory = CurrentCategory();
+            var category = CurrentCategory();
 
-            if(QuestionBanks.TryGetValue(questionCategory, out var questions))
+            if(QuestionBanks.TryGetValue(category, out var questionBank))
             {
-                Console.WriteLine(questions.First());
-                questions.RemoveFirst();
+                Console.WriteLine(questionBank.Next());
+                questionBank.Remove();
             }
         }
 
-
-        private String CurrentCategory()
+        private Category CurrentCategory()
         {
             var position = places[currentPlayer];
 
-            return Categories[position % Categories.Length];
+            return Categories[position % Categories.Count];
             
         }
 
