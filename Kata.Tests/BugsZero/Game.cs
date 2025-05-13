@@ -57,9 +57,12 @@
         public void AddPlayer(String playerName)
         {
             players.Add(playerName);
-            places[HowManyPlayers()] = 0;
-            purses[HowManyPlayers()] = 0;
-            inPenaltyBox[HowManyPlayers()] = false;
+
+            int playerIndex = players.Count - 1;
+
+            places[playerIndex] = 0;
+            purses[playerIndex] = 0;
+            inPenaltyBox[playerIndex] = false;
 
             Console.WriteLine(playerName + " was Added");
             Console.WriteLine("They are player number " + players.Count);
