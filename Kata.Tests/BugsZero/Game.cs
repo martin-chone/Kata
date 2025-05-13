@@ -51,7 +51,7 @@
 
         public bool IsPlayable()
         {
-            return (HowManyPlayers() >= 2);
+            return (players.Count >= 2);
         }
 
         public void AddPlayer(String playerName)
@@ -66,11 +66,6 @@
 
             Console.WriteLine(playerName + " was Added");
             Console.WriteLine("They are player number " + players.Count);
-        }
-
-        public int HowManyPlayers()
-        {
-            return players.Count;
         }
 
         public void Roll(int roll)
