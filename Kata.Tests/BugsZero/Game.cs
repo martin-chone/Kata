@@ -85,13 +85,14 @@
                     places[currentPlayer] = places[currentPlayer] + roll;
                     if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
 
-                    var category = CurrentCategory();
-
                     Console.WriteLine(players[currentPlayer]
                             + "'s new location is "
                             + places[currentPlayer]);
+
+                    var category = GetCurrentCategory();
                     Console.WriteLine("The category is " + category.Name);
-                    AskQuestion();
+
+                    DisplayNextQuestionFromCategory(category);
                 }
                 else
                 {
@@ -106,30 +107,29 @@
                 places[currentPlayer] = places[currentPlayer] + roll;
                 if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
 
-                var category = CurrentCategory();
-
                 Console.WriteLine(players[currentPlayer]
                         + "'s new location is "
                         + places[currentPlayer]);
+
+                var category = GetCurrentCategory();
                 Console.WriteLine("The category is " + category.Name);
-                AskQuestion();
+
+                DisplayNextQuestionFromCategory(category);
             }
 
         }
 
-        private void AskQuestion()
+        private void DisplayNextQuestionFromCategory(Category category)
         {
-            var category = CurrentCategory();
-
             if(QuestionBanks.TryGetValue(category, out var questionBank))
             {
-                var questionText = questionBank.Next().Text;
-                Console.WriteLine(questionText);
+                var question = questionBank.Next();
+                Console.WriteLine(question.Text);
                 questionBank.Remove();
             }
         }
 
-        private Category CurrentCategory()
+        private Category GetCurrentCategory()
         {
             var position = places[currentPlayer];
 
