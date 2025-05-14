@@ -89,7 +89,7 @@
                     if (currentPlayerPlace > 11) currentPlayerPlace = currentPlayerPlace - 12;
                     places[currentPlayerIndex] = currentPlayerPlace;
 
-                    Console.WriteLine(currentPlayerName + "'s new location is " + currentPlayerPlace);
+                    DisplayNewCurrentPlayerPlace(currentPlayerName, currentPlayerPlace);
 
                     var category = GetCurrentCategory();
                     DisplayCurrentCategory(category);
@@ -100,16 +100,14 @@
                     isGettingOutOfPenaltyBox = false;
                     DisplayPenaltyStatus(currentPlayerName, "exit", isGettingOutOfPenaltyBox);
                 }
-
             }
             else
             {
-
-                currentPlayerPlace = places[currentPlayerIndex] = currentPlayerPlace + roll;
+                currentPlayerPlace = currentPlayerPlace + roll;
                 if (currentPlayerPlace > 11) currentPlayerPlace = currentPlayerPlace - 12;
                 places[currentPlayerIndex] = currentPlayerPlace;
 
-                Console.WriteLine(currentPlayerName + "'s new location is " + currentPlayerPlace);
+                DisplayNewCurrentPlayerPlace(currentPlayerName, currentPlayerPlace);
 
                 var category = GetCurrentCategory();
                 DisplayCurrentCategory(category);
@@ -159,6 +157,11 @@
                     Console.WriteLine($"{playerName} was sent to the penalty box");
                     break;
             }
+        }
+
+        private void DisplayNewCurrentPlayerPlace(string playerName, int place)
+        {
+            Console.WriteLine(playerName + "'s new location is " + place);
         }
 
         private void DisplayCurrentCategory(Category category)
