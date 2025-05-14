@@ -83,7 +83,7 @@
                 if (roll % 2 != 0)
                 {
                     isGettingOutOfPenaltyBox = true;
-                    DisplayPenaltyStatus(currentPlayerName, "exit", isGettingOutOfPenaltyBox);
+                    DisplayExitPenaltyAction(currentPlayerName, isGettingOutOfPenaltyBox);
 
                     currentPlayerPlace = currentPlayerPlace + roll;
                     if (currentPlayerPlace > 11) currentPlayerPlace = currentPlayerPlace - 12;
@@ -98,7 +98,7 @@
                 else
                 {
                     isGettingOutOfPenaltyBox = false;
-                    DisplayPenaltyStatus(currentPlayerName, "exit", isGettingOutOfPenaltyBox);
+                    DisplayExitPenaltyAction(currentPlayerName, isGettingOutOfPenaltyBox);
                 }
             }
             else
@@ -143,20 +143,16 @@
             Console.WriteLine("They have rolled a " + roll);
         }
 
-        private void DisplayPenaltyStatus(string playerName, string action, bool allowed = false)
+        private void DisplayEnterPenaltyAction(string playerName)
         {
-            switch (action)
-            {
-                case "exit":
-                    if (allowed)
-                        Console.WriteLine($"{playerName} is getting out of the penalty box");
-                    else
-                        Console.WriteLine($"{playerName} is not getting out of the penalty box");
-                    break;
-                case "enter":
-                    Console.WriteLine($"{playerName} was sent to the penalty box");
-                    break;
-            }
+            Console.WriteLine($"{playerName} was sent to the penalty box");
+        }
+
+        private void DisplayExitPenaltyAction(string playerName, bool allowed)
+        {
+            Console.WriteLine(allowed
+                ? $"{playerName} is getting out of the penalty box"
+                : $"{playerName} is not getting out of the penalty box");
         }
 
         private void DisplayNewCurrentPlayerPlace(string playerName, int place)
@@ -236,7 +232,7 @@
 
             DisplayInCorrectAnswer();
 
-            DisplayPenaltyStatus(currentPlayerName, "enter");
+            DisplayEnterPenaltyAction(currentPlayerName);
             inPenaltyBox[currentPlayer] = true;
 
             currentPlayer++;
