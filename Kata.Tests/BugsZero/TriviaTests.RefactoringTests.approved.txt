@@ -75,7 +75,7 @@ They have rolled a 1
 Chet's new location is 2
 The category is Sports
 Sports Question 3
-Answer was corrent!!!!
+Answer was correct!!!!
 Chet now has 1 Gold Coins.
 Question was incorrectly answered
 Pat was sent to the penalty box
