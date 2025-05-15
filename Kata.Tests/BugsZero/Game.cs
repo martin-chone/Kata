@@ -128,9 +128,76 @@
 
         private Category GetCurrentCategory()
         {
-            var position = places[currentPlayer];
+            var currentPlayerIndex = currentPlayer;
+            var currentPlayerPlace = places[currentPlayerIndex];
 
-            return Categories[position % Categories.Count];
+            return Categories[currentPlayerPlace % Categories.Count];
+        }
+
+        public bool WasCorrectlyAnswered()
+        {
+            var currentPlayerIndex = currentPlayer;
+            var currentPlayerName = players[currentPlayerIndex];
+            var currentPlayerIsInPenaltyBox = inPenaltyBox[currentPlayerIndex];
+
+            if (currentPlayerIsInPenaltyBox)
+            {
+                if (isGettingOutOfPenaltyBox)
+                {
+                    DisplayCorrectAnswer();
+                    currentPlayer++;
+                    if (currentPlayer == players.Count) currentPlayer = 0;
+
+                    currentPlayerIndex = currentPlayer;
+                    currentPlayerName = players[currentPlayerIndex];
+
+                    purses[currentPlayer]++;
+                    DisplayReward(currentPlayerName, purses[currentPlayer]);
+
+                    bool winner = DidPlayerWin();
+
+                    return winner;
+                }
+                else
+                {
+                    currentPlayer++;
+                    if (currentPlayer == players.Count) currentPlayer = 0;
+                    return true;
+                }
+            }
+            else
+            {
+                DisplayCorrectAnswer();
+                purses[currentPlayer]++;
+                DisplayReward(currentPlayerName, purses[currentPlayer]);
+
+                bool winner = DidPlayerWin();
+                currentPlayer++;
+                if (currentPlayer == players.Count) currentPlayer = 0;
+
+                return winner;
+            }
+        }
+
+        public bool WrongAnswer()
+        {
+            var currentPlayerIndex = currentPlayer;
+            var currentPlayerName = players[currentPlayerIndex];
+
+            DisplayInCorrectAnswer();
+
+            DisplayEnterPenaltyAction(currentPlayerName);
+            inPenaltyBox[currentPlayer] = true;
+
+            currentPlayer++;
+            if (currentPlayer == players.Count) currentPlayer = 0;
+            return true;
+        }
+
+
+        private bool DidPlayerWin()
+        {
+            return !(purses[currentPlayer] == 6);
         }
 
         private void DisplayCurrentPlayer(string playerName)
@@ -178,72 +245,6 @@
         private void DisplayInCorrectAnswer()
         {
             Console.WriteLine("Question was incorrectly answered");
-        }
-
-        public bool WasCorrectlyAnswered()
-        {
-            var currentPlayerIndex = currentPlayer;
-            var currentPlayerName = players[currentPlayerIndex];
-            var currentPlayerIsInPenaltyBox = inPenaltyBox[currentPlayerIndex];
-
-            if (currentPlayerIsInPenaltyBox)
-            {
-                if (isGettingOutOfPenaltyBox)
-                {
-                    DisplayCorrectAnswer();
-                    currentPlayer++;
-                    if (currentPlayer == players.Count) currentPlayer = 0;
-
-                    currentPlayerIndex = currentPlayer;
-                    currentPlayerName = players[currentPlayerIndex];
-
-                    purses[currentPlayer]++;
-                    DisplayReward(currentPlayerName, purses[currentPlayer]);
-
-                    bool winner = DidPlayerWin();
-                    
-                    return winner;
-                }
-                else
-                {
-                    currentPlayer++;
-                    if (currentPlayer == players.Count) currentPlayer = 0;
-                    return true;
-                }
-            }
-            else
-            {
-                DisplayCorrectAnswer();
-                purses[currentPlayer]++;
-                DisplayReward(currentPlayerName, purses[currentPlayer]);
-
-                bool winner = DidPlayerWin();
-                currentPlayer++;
-                if (currentPlayer == players.Count) currentPlayer = 0;
-
-                return winner;
-            }
-        }
-
-        public bool WrongAnswer()
-        {
-            var currentPlayerIndex = currentPlayer;
-            var currentPlayerName = players[currentPlayerIndex];
-
-            DisplayInCorrectAnswer();
-
-            DisplayEnterPenaltyAction(currentPlayerName);
-            inPenaltyBox[currentPlayer] = true;
-
-            currentPlayer++;
-            if (currentPlayer == players.Count) currentPlayer = 0;
-            return true;
-        }
-
-
-        private bool DidPlayerWin()
-        {
-            return !(purses[currentPlayer] == 6);
         }
     }
 
