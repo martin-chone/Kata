@@ -3,28 +3,41 @@ namespace Kata.Tests.PaginationSeven
 {
     public static class Pagination
     {
-        public static string GetSeven(int current, int total)
+        private static readonly int MaxVisible = 7;
+        private const int EdgePageCount = 5;
+        private const string Ellipsis = "...";
+
+        public static string Build(int current, int total)
         {
-            if (total > 7) 
-            {
-                if(current < 5) return $"{Format(current, 1, 5)} ... {total}";
+            if (current < 1 || current > total || total < 1)
+                throw new ArgumentOutOfRangeException();
 
-                if (current > total - 4)
-                    return $"1 ... {Format(current, total - 4, total)}";
+            if (total <= MaxVisible)
+                return BuildRange(current, 1, total);
 
-                return $"1 ... {current - 1} ({current}) {current + 1} ... {total}"; 
-            }
+            int leadStart = 1;
+            int tailStart = total - (EdgePageCount - 1);
 
-            return Format(current, 1, total);
+            if (InLeadingRange(current)) 
+                return $"{BuildRange(current, leadStart, EdgePageCount)} {Ellipsis} {total}";
+
+            if (InTrailingRange(current, tailStart))
+                return $"{leadStart} {Ellipsis} {BuildRange(current, tailStart, total)}";
+
+            return $"{leadStart} {Ellipsis} {BuildRange(current, current -1, current + 1)} {Ellipsis} {total}"; 
         }
 
-        private static string Format(int current, int from, int to)
+        private static string BuildRange(int current, int from, int to)
         {
-            IList<string> parts = new List<string>();
+            var parts = new List<string>();
             for (int i = from; i <= to; i++)
                 parts.Add((i == current) ? $"({i})" : $"{i}");
 
             return string.Join(" ", parts);
         }
+
+        private static bool InLeadingRange(int current) => current < EdgePageCount;
+
+        private static bool InTrailingRange(int current, int tailStart) => current > tailStart;
     }
 }
