@@ -20,6 +20,10 @@ Comprend plusieurs approches :
 
 ### 5. [BugsZero](./Kata.Tests/BugsZero/)
 
+### 5. [PaginationSeven](./Kata.Tests/PaginationSeven/)
+Comprend plusieurs approches :
+- Approche impérative
+
 ---
 
 ## 🧪 Approche TDD

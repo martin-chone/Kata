@@ -1,7 +1,7 @@
 ﻿
 namespace Kata.Tests.PaginationSeven
 {
-    public static class Pagination
+    public static class PaginationImperative
     {
         private static readonly int MaxVisible = 7;
         private const int EdgePageCount = 5;

@@ -18,7 +18,7 @@
         [InlineData(102, 102, "1 ... 98 99 100 101 (102)")]
         public void ShouldCurrentPageOfTotalPages(int current, int total, string expected)
         {
-            Assert.Equal(expected, Pagination.Build(current, total));
+            Assert.Equal(expected, PaginationImperative.Build(current, total));
         }
 
         [Theory]
@@ -28,7 +28,7 @@
         public void ShouldThrowWhenOutOfLimits(int current, int total)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Pagination.Build(current, total));
+                PaginationImperative.Build(current, total));
         }
     }
 }
