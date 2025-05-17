@@ -24,6 +24,7 @@ Comprend plusieurs approches :
 Comprend plusieurs approches :
 - Approche impérative
 - Approche fonctionnelle
+- Approche déclarative
 
 ---
 
