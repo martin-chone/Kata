@@ -107,5 +107,15 @@
             var result = pagination.Render();
             Assert.Equal(expected, result);
         }
+
+        [Theory]
+        [InlineData(0, 9)]
+        [InlineData(9, 7)]
+        [InlineData(3, 0)]
+        public void ShouldThrowWhenOutOfLimitsObject(int current, int total)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                new PaginationObject(current, total).Render());
+        }
     }
 }

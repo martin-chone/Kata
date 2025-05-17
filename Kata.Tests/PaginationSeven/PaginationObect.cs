@@ -11,6 +11,9 @@ namespace Kata.Tests.PaginationSeven
 
         public PaginationObject(int current, int total)
         {
+            if (current < 1 || current > total || total < 1)
+                throw new ArgumentOutOfRangeException();
+
             Current = current;
             Total = total;
         }
