@@ -88,5 +88,24 @@
             Assert.Throws<ArgumentOutOfRangeException>(() =>
                 PaginationDeclarative.Build(current, total));
         }
+
+        [Theory]
+        [InlineData(1, 1, "(1)")]
+        [InlineData(1, 7, "(1) 2 3 4 5 6 7")]
+        [InlineData(2, 7, "1 (2) 3 4 5 6 7")]
+        [InlineData(3, 7, "1 2 (3) 4 5 6 7")]
+        [InlineData(6, 7, "1 2 3 4 5 (6) 7")]
+        [InlineData(2, 5, "1 (2) 3 4 5")]
+        [InlineData(2, 9, "1 (2) 3 4 5 ... 9")]
+        [InlineData(4, 9, "1 2 3 (4) 5 ... 9")]
+        [InlineData(6, 9, "1 ... 5 (6) 7 8 9")]
+        [InlineData(8, 9, "1 ... 5 6 7 (8) 9")]
+        [InlineData(5, 9, "1 ... 4 (5) 6 ... 9")]
+        public void ShouldCurrentPageOfTotalPagesObject(int current, int total, string expected)
+        {
+            var pagination = new PaginationObject(current, total);
+            var result = pagination.Render();
+            Assert.Equal(expected, result);
+        }
     }
 }

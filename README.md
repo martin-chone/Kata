@@ -25,6 +25,7 @@ Comprend plusieurs approches :
 - Approche impérative
 - Approche fonctionnelle
 - Approche déclarative
+- Approche orienté  objet
 
 ---
 
