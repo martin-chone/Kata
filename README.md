@@ -23,6 +23,7 @@ Comprend plusieurs approches :
 ### 5. [PaginationSeven](./Kata.Tests/PaginationSeven/)
 Comprend plusieurs approches :
 - Approche impérative
+- Approche fonctionnelle
 
 ---
 
