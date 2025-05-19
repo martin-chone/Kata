@@ -1,12 +1,4 @@
-﻿using Kata.Tests.Tennis;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Kata.Tests.BugsZero
+﻿namespace Kata.Tests.BugsZero.Output
 {
     public class ConsoleGameOutput : IGameOutput
     {

@@ -1,4 +1,4 @@
-﻿namespace Kata.Tests.BugsZero
+﻿namespace Kata.Tests.BugsZero.Output
 {
     public interface IGameOutput
     {

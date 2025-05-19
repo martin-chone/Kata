@@ -1,7 +1,7 @@
 using Assent;
 using System.Text;
 
-namespace Kata.Tests.BugsZero
+namespace Kata.Tests.BugsZero.Tests
 {
     public class TriviaTests
     {
@@ -11,7 +11,7 @@ namespace Kata.Tests.BugsZero
             var output = new StringBuilder();
             Console.SetOut(new StringWriter(output));
 
-            Game aGame = new Game();
+            Game aGame = GameFactory.CreateDefaultGame();
             Console.WriteLine(aGame.IsPlayable());
             aGame.AddPlayer("Chet");
             aGame.AddPlayer("Pat");

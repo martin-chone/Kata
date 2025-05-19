@@ -1,4 +1,9 @@
-﻿namespace Kata.Tests.BugsZero
+﻿using Kata.Tests.BugsZero.Domain.PenaltyBox;
+using Kata.Tests.BugsZero.Domain.Players;
+using Kata.Tests.BugsZero.Domain.Questions;
+using Kata.Tests.BugsZero.Output;
+
+namespace Kata.Tests.BugsZero.Domain.Turn
 {
     public class TurnService
     {

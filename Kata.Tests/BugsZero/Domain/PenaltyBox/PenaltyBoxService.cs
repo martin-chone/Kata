@@ -1,4 +1,6 @@
-﻿namespace Kata.Tests.BugsZero
+﻿using Kata.Tests.BugsZero.Domain.Players;
+
+namespace Kata.Tests.BugsZero.Domain.PenaltyBox
 {
     public class PenaltyBoxService
     {

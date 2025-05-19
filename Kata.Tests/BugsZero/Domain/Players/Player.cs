@@ -1,6 +1,4 @@
-﻿using Kata.Tests.Tennis;
-
-namespace Kata.Tests.BugsZero
+﻿namespace Kata.Tests.BugsZero.Domain.Players
 {
     public class Player
     {

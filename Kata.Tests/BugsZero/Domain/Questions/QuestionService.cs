@@ -1,4 +1,4 @@
-﻿namespace Kata.Tests.BugsZero
+﻿namespace Kata.Tests.BugsZero.Domain.Questions
 {
     public class QuestionService
     {
