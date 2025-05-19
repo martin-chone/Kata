@@ -80,7 +80,6 @@
 
                 if (player.IsExitingPenaltyBox)
                 {
-                    player.ReleaseFromPenaltyBox();
                     MoveAndAskQuestion(player, roll);
                 }
             }
