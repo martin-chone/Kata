@@ -11,7 +11,7 @@ namespace Kata.Tests.BugsZero
             var output = new StringBuilder();
             Console.SetOut(new StringWriter(output));
 
-            Game aGame = new Game();
+            Game aGame = new Game(new ConsoleGameOutput());
             Console.WriteLine(aGame.IsPlayable());
             aGame.AddPlayer("Chet");
             aGame.AddPlayer("Pat");

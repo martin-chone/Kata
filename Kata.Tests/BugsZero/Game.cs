@@ -2,6 +2,8 @@
 {
     public class Game
     {
+        private readonly IGameOutput _output;
+
         private const int TotalPlaces = 12;
         private const int WinningsThreshold = 6;
 
@@ -14,8 +16,10 @@
         private IList<Category> Categories;
         private Dictionary<Category, QuestionBank> QuestionBanks;
 
-        public Game()
+        public Game(IGameOutput output)
         {
+            _output = output;
+
             InitializeCategories();
             InitializeQuestionsByCategory();
         }
@@ -56,16 +60,15 @@
         public void AddPlayer(String playerName)
         {
             players.Add(new Player(playerName));
-            Console.WriteLine(playerName + " was Added");
-            Console.WriteLine("They are player number " + players.Count);
+            _output.PlayerAdded(playerName, players.Count);
         }
 
         public void Roll(int roll)
         {
             var player = CurrentPlayer;
 
-            DisplayCurrentPlayer(player);
-            DisplayCurrentRoll(roll);
+            _output.ShowCurrentPlayer(player.Name);
+            _output.ShowRoll(roll);
 
             player.IsExitingPenaltyBox = false;
 
@@ -74,16 +77,16 @@
                 if (player.CanExitPenaltyBox(roll))
                 {
                     player.IsExitingPenaltyBox = true;
-                    DisplayExitPenaltyAction(player, player.IsExitingPenaltyBox);
+                    _output.ExitPenaltyBox(player.Name, player.IsExitingPenaltyBox);
                     MovePlayer(player, roll);
 
                     var category = GetCategoryForPlace(player.Place);
-                    DisplayCurrentCategory(category);
+                    _output.ShowCategory(category.Name);
                     DisplayNextQuestionFromCategory(category);
                 }
                 else
                 {
-                    DisplayExitPenaltyAction(player, player.IsExitingPenaltyBox);
+                    _output.ExitPenaltyBox(player.Name, player.IsExitingPenaltyBox);
                 }
             }
             else
@@ -91,7 +94,7 @@
                 MovePlayer(player, roll);
 
                 var category = GetCategoryForPlace(player.Place);
-                DisplayCurrentCategory(category);
+                _output.ShowCategory(category.Name);
                 DisplayNextQuestionFromCategory(category);
             }
 
@@ -100,7 +103,7 @@
         private void MovePlayer(Player player, int roll)
         {
             player.Move(roll, TotalPlaces);
-            Console.WriteLine(player.Name + "'s new location is " + player.Place);
+            _output.ShowNewLocation(player.Name, player.Place);
         }
 
         private void DisplayNextQuestionFromCategory(Category category)
@@ -108,7 +111,7 @@
             if(QuestionBanks.TryGetValue(category, out var questionBank))
             {
                 var question = questionBank.Next();
-                Console.WriteLine(question.Text);
+                _output.ShowQuestion(question.Text);
                 questionBank.Remove();
             }
         }
@@ -126,7 +129,7 @@
             {
                 if (player.IsExitingPenaltyBox)
                 {
-                    DisplayCorrectAnswer();
+                    _output.ShowCorrectAnswer();
                     NextPlayer();
 
                     AddReward(CurrentPlayer);
@@ -143,7 +146,7 @@
             }
             else
             {
-                DisplayCorrectAnswer();
+                _output.ShowCorrectAnswer();
                 AddReward(player);
 
                 bool winner = DidPlayerWin();
@@ -157,10 +160,10 @@
         {
             var player = CurrentPlayer;
 
-            DisplayInCorrectAnswer();
+            _output.ShowIncorrectAnswer();
 
             player.SendToPenaltyBox();
-            DisplayEnterPenaltyAction(player);
+            _output.EnterPenaltyBox(player.Name);
 
             NextPlayer();
             return true;
@@ -180,44 +183,7 @@
         private void AddReward(Player player)
         {
             player.Reward();
-            Console.WriteLine($"{player.Name} now has {player.Purse} Gold Coins.");
-        }
-
-        private void DisplayCurrentPlayer(Player player)
-        {
-            Console.WriteLine(player.Name + " is the current player");
-        }
-
-        private void DisplayCurrentRoll(int roll)
-        {
-            Console.WriteLine("They have rolled a " + roll);
-        }
-
-        private void DisplayEnterPenaltyAction(Player player)
-        {
-            Console.WriteLine($"{player.Name} was sent to the penalty box");
-        }
-
-        private void DisplayExitPenaltyAction(Player player, bool allowed)
-        {
-            Console.WriteLine(allowed
-                ? $"{player.Name} is getting out of the penalty box"
-                : $"{player.Name} is not getting out of the penalty box");
-        }
-
-        private void DisplayCurrentCategory(Category category)
-        {
-            Console.WriteLine("The category is " + category.Name);
-        }
-
-        private void DisplayCorrectAnswer()
-        {
-            Console.WriteLine("Answer was correct!!!!");
-        }
-
-        private void DisplayInCorrectAnswer()
-        {
-            Console.WriteLine("Question was incorrectly answered");
+            _output.ShowPlayerPurse(player.Name, player.Purse);
         }
     }
 

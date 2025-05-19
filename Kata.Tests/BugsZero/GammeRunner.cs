@@ -6,7 +6,7 @@
 
         public static void Main(string[] args)
         {
-            Game aGame = new Game();
+            Game aGame = new Game(new ConsoleGameOutput());
 
             aGame.AddPlayer("Chet");
             aGame.AddPlayer("Pat");
