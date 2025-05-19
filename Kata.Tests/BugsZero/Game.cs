@@ -84,10 +84,7 @@
                 {
                     isGettingOutOfPenaltyBox = true;
                     DisplayExitPenaltyAction(currentPlayerName, isGettingOutOfPenaltyBox);
-
-                    currentPlayerPlace = currentPlayerPlace + roll;
-                    if (currentPlayerPlace > 11) currentPlayerPlace = currentPlayerPlace - 12;
-                    places[currentPlayerIndex] = currentPlayerPlace;
+                    currentPlayerPlace = MovePlayer(roll);
 
                     DisplayNewCurrentPlayerPlace(currentPlayerName, currentPlayerPlace);
 
@@ -103,9 +100,7 @@
             }
             else
             {
-                currentPlayerPlace = currentPlayerPlace + roll;
-                if (currentPlayerPlace > 11) currentPlayerPlace = currentPlayerPlace - 12;
-                places[currentPlayerIndex] = currentPlayerPlace;
+                currentPlayerPlace = MovePlayer(roll);
 
                 DisplayNewCurrentPlayerPlace(currentPlayerName, currentPlayerPlace);
 
@@ -114,6 +109,17 @@
                 DisplayNextQuestionFromCategory(category);
             }
 
+        }
+
+        private int MovePlayer(int roll)
+        {
+            var currentPlayerIndex = currentPlayer;
+            var currentPlayerPlace = places[currentPlayerIndex];
+
+            currentPlayerPlace = currentPlayerPlace + roll;
+            if (currentPlayerPlace > 11) currentPlayerPlace = currentPlayerPlace - 12;
+            places[currentPlayerIndex] = currentPlayerPlace;
+            return currentPlayerPlace;
         }
 
         private void DisplayNextQuestionFromCategory(Category category)
