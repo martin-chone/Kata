@@ -7,6 +7,7 @@
         private const int TotalPlaces = 12;
         private const int WinningsThreshold = 6;
         private const int PlayerMinimumNumber = 2;
+        private const int QuestionsPerCategory = 50;
 
         private readonly PenaltyBoxService _penaltyBoxService;
         private readonly QuestionService _questionService;
@@ -25,8 +26,7 @@
                 new("Pop"), new("Science"), new("Sports"), new("Rock")
             };
 
-            var questionsPerCategory = 50;
-            _questionService = new QuestionService(categories, questionsPerCategory);
+            _questionService = new QuestionService(categories, QuestionsPerCategory);
         }
 
         public bool IsPlayable()
@@ -51,17 +51,12 @@
             {
                 _penaltyBoxService.HandleRoll(player, roll);
                 _output.ExitPenaltyBox(player.Name, player.IsExitingPenaltyBox);
-
-                if (player.IsExitingPenaltyBox)
-                {
-                    MoveAndAskQuestion(player, roll);
-                }
             }
-            else
+
+            if (!player.InPenaltyBox || player.IsExitingPenaltyBox)
             {
                 MoveAndAskQuestion(player, roll);
             }
-
         }
 
         private void MoveAndAskQuestion(Player player, int roll)
@@ -91,13 +86,15 @@
 
             _output.ShowPlayerPurse(player.Name, player.Purse);
 
-            var hasWon = !player.HasWon(WinningsThreshold);
+            var continueGame = !player.HasWon(WinningsThreshold);
+
+            _penaltyBoxService.ReleaseFromPenalty(player);
             _playerManager.Next();
 
-            return hasWon;
+            return continueGame;
         }
 
-        public bool WrongAnswer()
+        public void WrongAnswer()
         {
             var player = CurrentPlayer;
 
@@ -106,8 +103,6 @@
             _penaltyBoxService.SendToPenalty(player);
             _output.EnterPenaltyBox(player.Name);
             _playerManager.Next();
-
-            return true;
         }
     }
 

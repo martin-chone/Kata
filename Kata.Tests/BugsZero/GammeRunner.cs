@@ -20,7 +20,7 @@
 
                 if (rand.Next(9) == 7)
                 {
-                    notAWinner = aGame.WrongAnswer();
+                    aGame.WrongAnswer();
                 }
                 else
                 {
