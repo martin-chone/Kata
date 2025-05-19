@@ -80,37 +80,21 @@
         {
             var player = CurrentPlayer;
 
-            if (player.InPenaltyBox)
+            if (player.InPenaltyBox && !player.IsExitingPenaltyBox) 
             {
-                if (player.IsExitingPenaltyBox)
-                {
-                    _output.ShowCorrectAnswer();
-                    
-
-                    AddReward(CurrentPlayer);
-
-                    bool winner = DidPlayerWin();
-
-                    _playerManager.Next();
-
-                    return winner;
-                }
-                else
-                {
-                    _playerManager.Next();
-                    return true;
-                }
-            }
-            else
-            {
-                _output.ShowCorrectAnswer();
-                AddReward(player);
-
-                bool winner = DidPlayerWin();
                 _playerManager.Next();
-
-                return winner;
+                return true;
             }
+
+            _output.ShowCorrectAnswer();
+            player.Reward();
+
+            _output.ShowPlayerPurse(player.Name, player.Purse);
+
+            var hasWon = !player.HasWon(WinningsThreshold);
+            _playerManager.Next();
+
+            return hasWon;
         }
 
         public bool WrongAnswer()
@@ -124,18 +108,6 @@
             _playerManager.Next();
 
             return true;
-        }
-
-
-        private bool DidPlayerWin()
-        {
-            return !(CurrentPlayer.HasWon(WinningsThreshold));
-        }
-
-        private void AddReward(Player player)
-        {
-            player.Reward();
-            _output.ShowPlayerPurse(player.Name, player.Purse);
         }
     }
 
