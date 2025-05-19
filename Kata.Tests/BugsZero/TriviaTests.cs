@@ -11,7 +11,7 @@ namespace Kata.Tests.BugsZero
             var output = new StringBuilder();
             Console.SetOut(new StringWriter(output));
 
-            Game aGame = new Game(new ConsoleGameOutput());
+            Game aGame = new Game();
             Console.WriteLine(aGame.IsPlayable());
             aGame.AddPlayer("Chet");
             aGame.AddPlayer("Pat");
@@ -32,7 +32,7 @@ namespace Kata.Tests.BugsZero
             aGame.Roll(1);
             aGame.Roll(1);
 
-            aGame.WasCorrectlyAnswered();
+            aGame.HandleCorrectAnswer();
             aGame.WrongAnswer();
 
             aGame.Roll(2);
@@ -48,9 +48,9 @@ namespace Kata.Tests.BugsZero
 
             aGame.WrongAnswer();
 
-            aGame.WasCorrectlyAnswered();
+            aGame.HandleCorrectAnswer();
             aGame.Roll(1);
-            aGame.WasCorrectlyAnswered();
+            aGame.HandleCorrectAnswer();
 
             var configuration = BuildConfiguration();
             this.Assent(output.ToString(), configuration);

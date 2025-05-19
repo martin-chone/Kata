@@ -6,7 +6,7 @@
 
         public static void Main(string[] args)
         {
-            Game aGame = new Game(new ConsoleGameOutput());
+            Game aGame = new Game();
 
             aGame.AddPlayer("Chet");
             aGame.AddPlayer("Pat");
@@ -24,7 +24,7 @@
                 }
                 else
                 {
-                    notAWinner = aGame.WasCorrectlyAnswered();
+                    notAWinner = aGame.HandleCorrectAnswer();
                 }
             } while (notAWinner);
 
