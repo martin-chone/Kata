@@ -24,8 +24,6 @@ namespace Kata.Tests.BugsZero
 
         public void ReleaseFromPenaltyBox() => InPenaltyBox = false;
 
-        public bool CanExitPenaltyBox(int roll) => roll % 2 != 0;
-
         public void Reward() => Purse++;
 
         public void Move(int roll, int totalPlaces) => Place = (Place + roll) % totalPlaces;

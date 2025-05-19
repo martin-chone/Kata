@@ -7,6 +7,8 @@
         private const int TotalPlaces = 12;
         private const int WinningsThreshold = 6;
 
+        private readonly PenaltyBoxService _penaltyBox;
+
         private List<Player> players = new List<Player>();
 
         int currentPlayer = 0;
@@ -19,7 +21,8 @@
         public Game(IGameOutput output)
         {
             _output = output;
-
+            _penaltyBox = new PenaltyBoxService();
+             
             InitializeCategories();
             InitializeQuestionsByCategory();
         }
@@ -70,34 +73,31 @@
             _output.ShowCurrentPlayer(player.Name);
             _output.ShowRoll(roll);
 
-            player.IsExitingPenaltyBox = false;
-
             if (player.InPenaltyBox)
             {
-                if (player.CanExitPenaltyBox(roll))
-                {
-                    player.IsExitingPenaltyBox = true;
-                    _output.ExitPenaltyBox(player.Name, player.IsExitingPenaltyBox);
-                    MovePlayer(player, roll);
+                _penaltyBox.HandleRoll(player, roll);
+                _output.ExitPenaltyBox(player.Name, player.IsExitingPenaltyBox);
 
-                    var category = GetCategoryForPlace(player.Place);
-                    _output.ShowCategory(category.Name);
-                    DisplayNextQuestionFromCategory(category);
-                }
-                else
+                if (player.IsExitingPenaltyBox)
                 {
-                    _output.ExitPenaltyBox(player.Name, player.IsExitingPenaltyBox);
+                    player.ReleaseFromPenaltyBox();
+                    MoveAndAskQuestion(player, roll);
                 }
             }
             else
             {
-                MovePlayer(player, roll);
-
-                var category = GetCategoryForPlace(player.Place);
-                _output.ShowCategory(category.Name);
-                DisplayNextQuestionFromCategory(category);
+                MoveAndAskQuestion(player, roll);
             }
 
+        }
+
+        private void MoveAndAskQuestion(Player player, int roll)
+        {
+            MovePlayer(player, roll);
+
+            var category = GetCategoryForPlace(player.Place);
+            _output.ShowCategory(category.Name);
+            DisplayNextQuestionFromCategory(category);
         }
 
         private void MovePlayer(Player player, int roll)
