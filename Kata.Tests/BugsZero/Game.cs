@@ -8,6 +8,7 @@
         private const int WinningsThreshold = 6;
 
         private readonly PenaltyBoxService _penaltyBox;
+        private readonly QuestionService _questionService;
 
         private List<Player> players = new List<Player>();
 
@@ -15,44 +16,18 @@
 
         private Player CurrentPlayer => players[currentPlayer];
 
-        private IList<Category> Categories;
-        private Dictionary<Category, QuestionBank> QuestionBanks;
-
         public Game(IGameOutput output)
         {
             _output = output;
             _penaltyBox = new PenaltyBoxService();
-             
-            InitializeCategories();
-            InitializeQuestionsByCategory();
-        }
 
-        private void InitializeCategories()
-        {
-            Categories = new List<Category>
+            var categories = new List<Category>
             {
-                new("Pop"),
-                new("Science"),
-                new("Sports"),
-                new("Rock")
+                new("Pop"), new("Science"), new("Sports"), new("Rock")
             };
-        }
 
-        private void InitializeQuestionsByCategory()
-        {
-            QuestionBanks = Categories.ToDictionary(
-                category => category, 
-                category => new QuestionBank());
-
-            for (int i = 0; i < 50; i++)
-            {
-                foreach (Category category in Categories)
-                {
-                    var questionText = $"{category.Name} Question {i}";
-                    var question = new Question(questionText);
-                    QuestionBanks[category].Add(question);
-                }
-            }
+            var questionsPerCategory = 50;
+            _questionService = new QuestionService(categories, questionsPerCategory);
         }
 
         public bool IsPlayable()
@@ -94,30 +69,16 @@
         {
             MovePlayer(player, roll);
 
-            var category = GetCategoryForPlace(player.Place);
+            var category = _questionService.GetCategoryForPlace(player.Place);
             _output.ShowCategory(category.Name);
-            DisplayNextQuestionFromCategory(category);
+            var question = _questionService.GetNextQuestion(category);
+            _output.ShowQuestion(question.Text);
         }
 
         private void MovePlayer(Player player, int roll)
         {
             player.Move(roll, TotalPlaces);
             _output.ShowNewLocation(player.Name, player.Place);
-        }
-
-        private void DisplayNextQuestionFromCategory(Category category)
-        {
-            if(QuestionBanks.TryGetValue(category, out var questionBank))
-            {
-                var question = questionBank.Next();
-                _output.ShowQuestion(question.Text);
-                questionBank.Remove();
-            }
-        }
-
-        private Category GetCategoryForPlace(int place)
-        {
-            return Categories[place % Categories.Count];
         }
 
         public bool WasCorrectlyAnswered()
