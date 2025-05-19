@@ -66,18 +66,14 @@
 
         private void MoveAndAskQuestion(Player player, int roll)
         {
-            MovePlayer(player, roll);
+            player.Move(roll, TotalPlaces);
+            _output.ShowNewLocation(player.Name, player.Place);
 
             var category = _questionService.GetCategoryForPlace(player.Place);
             _output.ShowCategory(category.Name);
+
             var question = _questionService.GetNextQuestion(category);
             _output.ShowQuestion(question.Text);
-        }
-
-        private void MovePlayer(Player player, int roll)
-        {
-            player.Move(roll, TotalPlaces);
-            _output.ShowNewLocation(player.Name, player.Place);
         }
 
         public bool WasCorrectlyAnswered()
@@ -89,11 +85,13 @@
                 if (player.IsExitingPenaltyBox)
                 {
                     _output.ShowCorrectAnswer();
-                    _playerManager.Next();
+                    
 
                     AddReward(CurrentPlayer);
 
                     bool winner = DidPlayerWin();
+
+                    _playerManager.Next();
 
                     return winner;
                 }
@@ -121,10 +119,10 @@
 
             _output.ShowIncorrectAnswer();
 
-            player.SendToPenaltyBox();
+            _penaltyBoxService.SendToPenalty(player);
             _output.EnterPenaltyBox(player.Name);
-
             _playerManager.Next();
+
             return true;
         }
 
