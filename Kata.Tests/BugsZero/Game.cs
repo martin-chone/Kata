@@ -6,20 +6,19 @@
 
         private const int TotalPlaces = 12;
         private const int WinningsThreshold = 6;
+        private const int PlayerMinimumNumber = 2;
 
-        private readonly PenaltyBoxService _penaltyBox;
+        private readonly PenaltyBoxService _penaltyBoxService;
         private readonly QuestionService _questionService;
+        private readonly PlayerManager _playerManager;
 
-        private List<Player> players = new List<Player>();
-
-        int currentPlayer = 0;
-
-        private Player CurrentPlayer => players[currentPlayer];
+        private Player CurrentPlayer => _playerManager.CurrentPlayer;
 
         public Game(IGameOutput output)
         {
             _output = output;
-            _penaltyBox = new PenaltyBoxService();
+            _penaltyBoxService = new PenaltyBoxService();
+            _playerManager = new PlayerManager();
 
             var categories = new List<Category>
             {
@@ -32,13 +31,13 @@
 
         public bool IsPlayable()
         {
-            return (players.Count >= 2);
+            return _playerManager.HasEnoughPlayers(PlayerMinimumNumber);
         }
 
         public void AddPlayer(String playerName)
         {
-            players.Add(new Player(playerName));
-            _output.PlayerAdded(playerName, players.Count);
+            _playerManager.AddPlayer(playerName);
+            _output.PlayerAdded(playerName, _playerManager.Count);
         }
 
         public void Roll(int roll)
@@ -50,7 +49,7 @@
 
             if (player.InPenaltyBox)
             {
-                _penaltyBox.HandleRoll(player, roll);
+                _penaltyBoxService.HandleRoll(player, roll);
                 _output.ExitPenaltyBox(player.Name, player.IsExitingPenaltyBox);
 
                 if (player.IsExitingPenaltyBox)
@@ -90,7 +89,7 @@
                 if (player.IsExitingPenaltyBox)
                 {
                     _output.ShowCorrectAnswer();
-                    NextPlayer();
+                    _playerManager.Next();
 
                     AddReward(CurrentPlayer);
 
@@ -100,7 +99,7 @@
                 }
                 else
                 {
-                    NextPlayer();
+                    _playerManager.Next();
                     return true;
                 }
             }
@@ -110,7 +109,7 @@
                 AddReward(player);
 
                 bool winner = DidPlayerWin();
-                NextPlayer();
+                _playerManager.Next();
 
                 return winner;
             }
@@ -125,7 +124,7 @@
             player.SendToPenaltyBox();
             _output.EnterPenaltyBox(player.Name);
 
-            NextPlayer();
+            _playerManager.Next();
             return true;
         }
 
@@ -133,11 +132,6 @@
         private bool DidPlayerWin()
         {
             return !(CurrentPlayer.HasWon(WinningsThreshold));
-        }
-
-        private void NextPlayer()
-        {
-            currentPlayer = (currentPlayer + 1) % players.Count;
         }
 
         private void AddReward(Player player)
