@@ -29,6 +29,8 @@ Comprend plusieurs approches :
 
 ### 7. [Potter](./Kata.Tests/Potter/)
 
+### 8. [MovieRental](./Kata.Tests/MovieRental/)
+
 ---
 
 ## 🧪 Approche TDD
