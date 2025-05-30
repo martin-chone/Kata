@@ -20,41 +20,17 @@ namespace Kata.Tests.MovieRental
 
         public string statement()
         {
-            double totalAmount = 0;
-            int frequentRenterPoints = 0;
             string result = "Rental Record for " + Name + "\n";
 
-            foreach (Rental each in rentals)
+            double totalAmount = GetTotalAmount();
+            int frequentRenterPoints = GetFrequentRenterPoints();
+
+            foreach (Rental rental in rentals)
             {
-                double thisAmount = 0;
-
-                //determine amounts for each line
-                switch (each.Movie.PriceCode)
-                {
-                    case Movie.REGULAR:
-                        thisAmount += 2;
-                        if (each.DaysRented > 2)
-                            thisAmount += (each.DaysRented - 2) * 1.5;
-                        break;
-                    case Movie.NEW_RELEASE:
-                        thisAmount += each.DaysRented * 3;
-                        break;
-                    case Movie.CHILDRENS:
-                        thisAmount += 1.5;
-                        if (each.DaysRented > 3)
-                            thisAmount += (each.DaysRented - 3) * 1.5;
-                        break;
-                }
-
-                // add frequent renter points
-                frequentRenterPoints++;
-                // add bonus for a two day new release rental
-                if ((each.Movie.PriceCode == Movie.NEW_RELEASE) && each.DaysRented > 1)
-                    frequentRenterPoints++;
+                var amount = GetAmountForRental(rental);
 
                 // show figures for this rental
-                result += "\t" + each.Movie.Title + "\t" + thisAmount.ToString() + "\n";
-                totalAmount += thisAmount;
+                result = ShowRentalInformations(result, rental, amount);
             }
 
             // add footer lines
@@ -62,6 +38,79 @@ namespace Kata.Tests.MovieRental
             result += "You earned " + frequentRenterPoints.ToString() + " frequent renter points";
 
             return result;
+        }
+
+        private string ShowRentalInformations(string result, Rental rental, double amount)
+        {
+            result += "\t" + rental.Movie.Title + "\t" + amount.ToString() + "\n";
+            return result;
+        }
+
+        private int GetFrequentRenterPoints()
+        {
+            int frequentRenterPoints = 0;
+
+            foreach (Rental rental in rentals)
+            {
+                frequentRenterPoints++;
+                frequentRenterPoints = AddBonus(frequentRenterPoints, rental);
+            }
+            return frequentRenterPoints;
+        }
+
+        private int AddBonus(int frequentRenterPoints, Rental rental)
+        {
+            if ((rental.Movie.PriceCode == Movie.NEW_RELEASE) && rental.DaysRented > 1)
+                frequentRenterPoints++;
+            return frequentRenterPoints;
+        }
+
+        private double GetTotalAmount()
+        {
+            double amount = 0;
+
+            foreach (Rental rental in rentals)
+            {
+                amount += GetAmountForRental(rental);
+            }
+
+            return amount;
+        }
+
+        private double GetAmountForRental(Rental rental)
+        {
+            switch (rental.Movie.PriceCode)
+            {
+                case Movie.REGULAR:
+                    return GetMovieRegularAmount(rental);
+                case Movie.NEW_RELEASE:
+                    return GetMovieNewReleaseAmount(rental);
+                case Movie.CHILDRENS:
+                    return GetMovieChildrensAmount(rental);
+                default:
+                    return 0;
+            }
+        }
+
+        private double GetMovieChildrensAmount(Rental each)
+        {
+            double amount = 1.5;
+            if (each.DaysRented > 3)
+                amount += (each.DaysRented - 3) * 1.5;
+            return amount;
+        }
+
+        private double GetMovieNewReleaseAmount(Rental each)
+        {
+            return each.DaysRented * 3;
+        }
+
+        private double GetMovieRegularAmount(Rental each)
+        {
+            double amount = 2;
+            if (each.DaysRented > 2)
+                amount += (each.DaysRented - 2) * 1.5;
+            return amount;
         }
     }
 }
