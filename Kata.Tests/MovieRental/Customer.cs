@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace Kata.Tests.MovieRental
 {
 
@@ -20,7 +22,8 @@ namespace Kata.Tests.MovieRental
 
         public string statement()
         {
-            string result = "Rental Record for " + Name + "\n";
+            var result = new StringBuilder();
+            result.Append($"Rental Record for {Name}\n");
 
             double totalAmount = CalculateTotalAmount();
             int frequentRenterPoints = GetFrequentRenterPoints();
@@ -29,21 +32,19 @@ namespace Kata.Tests.MovieRental
             {
                 var amount = CalculateRentalAmount(rental);
 
-                // show figures for this rental
-                result = AppendRentalInfoToStatement(result, rental, amount);
+                AppendRentalInformation(result, rental, amount);
             }
 
             // add footer lines
-            result += "Amount owed is " + totalAmount.ToString() + "\n";
-            result += "You earned " + frequentRenterPoints.ToString() + " frequent renter points";
+            result.Append($"Amount owed is {totalAmount}\n");
+            result.Append($"You earned {frequentRenterPoints} frequent renter points");
 
-            return result;
+            return result.ToString();
         }
 
-        private string AppendRentalInfoToStatement(string result, Rental rental, double amount)
+        private void AppendRentalInformation(StringBuilder sb, Rental rental, double amount)
         {
-            result += "\t" + rental.Movie.Title + "\t" + amount.ToString() + "\n";
-            return result;
+            sb.Append($"\t{rental.Movie.Title}\t{amount}\n");
         }
 
         private int GetFrequentRenterPoints()
