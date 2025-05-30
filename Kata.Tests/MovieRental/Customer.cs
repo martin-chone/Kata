@@ -22,15 +22,15 @@ namespace Kata.Tests.MovieRental
         {
             string result = "Rental Record for " + Name + "\n";
 
-            double totalAmount = GetTotalAmount();
+            double totalAmount = CalculateTotalAmount();
             int frequentRenterPoints = GetFrequentRenterPoints();
 
             foreach (Rental rental in rentals)
             {
-                var amount = GetAmountForRental(rental);
+                var amount = CalculateRentalAmount(rental);
 
                 // show figures for this rental
-                result = ShowRentalInformations(result, rental, amount);
+                result = AppendRentalInfoToStatement(result, rental, amount);
             }
 
             // add footer lines
@@ -40,7 +40,7 @@ namespace Kata.Tests.MovieRental
             return result;
         }
 
-        private string ShowRentalInformations(string result, Rental rental, double amount)
+        private string AppendRentalInfoToStatement(string result, Rental rental, double amount)
         {
             result += "\t" + rental.Movie.Title + "\t" + amount.ToString() + "\n";
             return result;
@@ -65,19 +65,19 @@ namespace Kata.Tests.MovieRental
             return frequentRenterPoints;
         }
 
-        private double GetTotalAmount()
+        private double CalculateTotalAmount()
         {
             double amount = 0;
 
             foreach (Rental rental in rentals)
             {
-                amount += GetAmountForRental(rental);
+                amount += CalculateRentalAmount(rental);
             }
 
             return amount;
         }
 
-        private double GetAmountForRental(Rental rental)
+        private double CalculateRentalAmount(Rental rental)
         {
             switch (rental.Movie.PriceCode)
             {
