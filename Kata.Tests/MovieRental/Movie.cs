@@ -6,8 +6,8 @@ namespace Kata.Tests.MovieRental
         public const int NEW_RELEASE = 1;
         public const int REGULAR = 0;
 
-        public String Title { get; set; }
-        public int PriceCode { get; set; }
+        public string Title { get; private set; }
+        public int PriceCode { get; private set; }
 
         public Movie(String title, int priceCode)
         {

@@ -8,7 +8,7 @@ namespace Kata.Tests.MovieRental
 
         public string Name { get; private set; }
 
-        private List<Rental> rentals = new List<Rental>();
+        private readonly List<Rental> _rentals = new();
 
         public Customer(string name)
         {
@@ -17,7 +17,7 @@ namespace Kata.Tests.MovieRental
 
         public void addRental(Rental arg)
         {
-            rentals.Add(arg);
+            _rentals.Add(arg);
         }
 
         public string statement()
@@ -25,14 +25,18 @@ namespace Kata.Tests.MovieRental
             var result = new StringBuilder();
             result.Append($"Rental Record for {Name}\n");
 
-            double totalAmount = CalculateTotalAmount();
-            int frequentRenterPoints = GetFrequentRenterPoints();
+            double totalAmount = 0;
+            int frequentRenterPoints = 0;
 
-            foreach (Rental rental in rentals)
+            foreach (Rental rental in _rentals)
             {
-                var amount = CalculateRentalAmount(rental);
-
+                var amount = rental.GetAmount();
                 AppendRentalInformation(result, rental, amount);
+
+                totalAmount += amount;
+
+                frequentRenterPoints++;
+                frequentRenterPoints += rental.GetBonusPoints();
             }
 
             // add footer lines
@@ -46,73 +50,7 @@ namespace Kata.Tests.MovieRental
         {
             sb.Append($"\t{rental.Movie.Title}\t{amount}\n");
         }
-
-        private int GetFrequentRenterPoints()
-        {
-            int frequentRenterPoints = 0;
-
-            foreach (Rental rental in rentals)
-            {
-                frequentRenterPoints++;
-                frequentRenterPoints = AddBonus(frequentRenterPoints, rental);
-            }
-            return frequentRenterPoints;
-        }
-
-        private int AddBonus(int frequentRenterPoints, Rental rental)
-        {
-            if ((rental.Movie.PriceCode == Movie.NEW_RELEASE) && rental.DaysRented > 1)
-                frequentRenterPoints++;
-            return frequentRenterPoints;
-        }
-
-        private double CalculateTotalAmount()
-        {
-            double amount = 0;
-
-            foreach (Rental rental in rentals)
-            {
-                amount += CalculateRentalAmount(rental);
-            }
-
-            return amount;
-        }
-
-        private double CalculateRentalAmount(Rental rental)
-        {
-            switch (rental.Movie.PriceCode)
-            {
-                case Movie.REGULAR:
-                    return GetMovieRegularAmount(rental);
-                case Movie.NEW_RELEASE:
-                    return GetMovieNewReleaseAmount(rental);
-                case Movie.CHILDRENS:
-                    return GetMovieChildrensAmount(rental);
-                default:
-                    return 0;
-            }
-        }
-
-        private double GetMovieChildrensAmount(Rental each)
-        {
-            double amount = 1.5;
-            if (each.DaysRented > 3)
-                amount += (each.DaysRented - 3) * 1.5;
-            return amount;
-        }
-
-        private double GetMovieNewReleaseAmount(Rental each)
-        {
-            return each.DaysRented * 3;
-        }
-
-        private double GetMovieRegularAmount(Rental each)
-        {
-            double amount = 2;
-            if (each.DaysRented > 2)
-                amount += (each.DaysRented - 2) * 1.5;
-            return amount;
-        }
+        
     }
 }
 
