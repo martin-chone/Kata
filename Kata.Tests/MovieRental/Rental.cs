@@ -13,48 +13,12 @@ namespace Kata.Tests.MovieRental
 
         public double GetAmount()
         {
-            switch (Movie.PriceCode)
-            {
-                case Movie.REGULAR:
-                    return GetMovieRegularAmount();
-                case Movie.NEW_RELEASE:
-                    return GetMovieNewReleaseAmount();
-                case Movie.CHILDRENS:
-                    return GetMovieChildrensAmount();
-                default:
-                    return 0;
-            }
+            return Movie.GetAmount(RentalDaysNumber);
         }
 
-        private double GetMovieChildrensAmount()
+        public int GetFrequentRenterPoints()
         {
-            double amount = 1.5;
-            if (RentalDaysNumber > 3)
-                amount += (RentalDaysNumber - 3) * 1.5;
-            return amount;
-        }
-
-        private double GetMovieNewReleaseAmount()
-        {
-            return RentalDaysNumber * 3;
-        }
-
-        private double GetMovieRegularAmount()
-        {
-            double amount = 2;
-            if (RentalDaysNumber > 2)
-                amount += (RentalDaysNumber - 2) * 1.5;
-            return amount;
-        }
-
-        public int GetBonusPoints()
-        {
-            int result = 0;
-
-            if ((Movie.PriceCode == Movie.NEW_RELEASE) && RentalDaysNumber > 1)
-                result++;
-
-            return result;
+            return Movie.GetFrequentRenterPoints(RentalDaysNumber);
         }
     }
 }

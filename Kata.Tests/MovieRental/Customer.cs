@@ -31,12 +31,10 @@ namespace Kata.Tests.MovieRental
             foreach (Rental rental in _rentals)
             {
                 var amount = rental.GetAmount();
-                AppendRentalInformation(result, rental, amount);
+                frequentRenterPoints += rental.GetFrequentRenterPoints();
 
+                result.Append($"\t{rental.Movie.Title}\t{amount}\n");
                 totalAmount += amount;
-
-                frequentRenterPoints++;
-                frequentRenterPoints += rental.GetBonusPoints();
             }
 
             // add footer lines
@@ -45,12 +43,6 @@ namespace Kata.Tests.MovieRental
 
             return result.ToString();
         }
-
-        private void AppendRentalInformation(StringBuilder sb, Rental rental, double amount)
-        {
-            sb.Append($"\t{rental.Movie.Title}\t{amount}\n");
-        }
-        
     }
 }
 

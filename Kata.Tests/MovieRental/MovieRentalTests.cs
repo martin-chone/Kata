@@ -6,10 +6,10 @@ namespace Kata.Tests.MovieRental
         public void Test1()
         {
             Customer customer = new Customer("Bob");
-            customer.addRental(new Rental(new Movie("Jaws", Movie.REGULAR), 2));
-            customer.addRental(new Rental(new Movie("Short New", Movie.NEW_RELEASE), 1));
-            customer.addRental(new Rental(new Movie("Long New", Movie.NEW_RELEASE), 2));
-            customer.addRental(new Rental(new Movie("Toy Story", Movie.CHILDRENS), 4));
+            customer.addRental(new Rental(new RegularMovie("Jaws"), 2));
+            customer.addRental(new Rental(new NewReleaseMovie("Short New"), 1));
+            customer.addRental(new Rental(new NewReleaseMovie("Long New"), 2));
+            customer.addRental(new Rental(new ChildrensMovie("Toy Story"), 4));
 
             String expected = "" +
                 "Rental Record for Bob\n" +
