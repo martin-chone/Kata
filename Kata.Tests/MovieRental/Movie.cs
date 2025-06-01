@@ -3,7 +3,6 @@ namespace Kata.Tests.MovieRental
     public abstract class Movie
     {
         public string Title { get; private set; }
-        public int PriceCode { get; private set; }
 
         public Movie(String title)
         {
