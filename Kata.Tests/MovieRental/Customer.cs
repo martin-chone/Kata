@@ -15,15 +15,12 @@ namespace Kata.Tests.MovieRental
             Name = name;
         }
 
-        public void addRental(Rental arg)
-        {
-            _rentals.Add(arg);
-        }
+        public void AddRental(Rental rental) => _rentals.Add(rental);
 
-        public string TextStatement()
+        public string Statement(IStatementFormatter formatter)
         {
-            var result = new StringBuilder();
-            result.Append($"Rental Record for {Name}\n");
+            var sb = new StringBuilder();
+            formatter.Start(sb, Name);
 
             double totalAmount = 0;
             int frequentRenterPoints = 0;
@@ -33,40 +30,14 @@ namespace Kata.Tests.MovieRental
                 var amount = rental.GetAmount();
                 frequentRenterPoints += rental.GetFrequentRenterPoints();
 
-                result.Append($"\t{rental.Movie.Title}\t{amount}\n");
                 totalAmount += amount;
+
+                formatter.AddRental(sb, rental, amount);
             }
 
-            result.Append($"Amount owed is {totalAmount}\n");
-            result.Append($"You earned {frequentRenterPoints} frequent renter points");
+            formatter.End(sb, totalAmount, frequentRenterPoints);
 
-            return result.ToString();
-        }
-
-        public string HtmlStatement()
-        {
-            var result = new StringBuilder();
-            result.Append($"<h1>Rental Record for <em>{Name}</em></h1>");
-            result.Append("<table>");
-
-            double totalAmount = 0;
-            int frequentRenterPoints = 0;
-
-            foreach (Rental rental in _rentals)
-            {
-                var amount = rental.GetAmount();
-                frequentRenterPoints += rental.GetFrequentRenterPoints();
-
-                result.Append($"<tr><td>{rental.Movie.Title}</td><td>{amount}</td></tr>");
-                totalAmount += amount;
-            }
-
-            result.Append("</table>");
-
-            result.Append($"<p>Amount owed is <em>{totalAmount}</em></p>");
-            result.Append($"<p>You earned <em>{frequentRenterPoints}</em> frequent renter points</p>");
-
-            return result.ToString();
+            return sb.ToString();
         }
     }
 }

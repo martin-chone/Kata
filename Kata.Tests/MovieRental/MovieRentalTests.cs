@@ -1,19 +1,15 @@
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
-using System.Diagnostics.Metrics;
-
 namespace Kata.Tests.MovieRental
 {
     public class MovieRentalTests
     {
         [Fact]
-        public void ShouldRentalTextStatement()
+        public void ShouldRentalTextStatementFormat()
         {
             Customer customer = new Customer("Bob");
-            customer.addRental(new Rental(new RegularMovie("Jaws"), 2));
-            customer.addRental(new Rental(new NewReleaseMovie("Short New"), 1));
-            customer.addRental(new Rental(new NewReleaseMovie("Long New"), 2));
-            customer.addRental(new Rental(new ChildrensMovie("Toy Story"), 4));
+            customer.AddRental(new Rental(new RegularMovie("Jaws"), 2));
+            customer.AddRental(new Rental(new NewReleaseMovie("Short New"), 1));
+            customer.AddRental(new Rental(new NewReleaseMovie("Long New"), 2));
+            customer.AddRental(new Rental(new ChildrensMovie("Toy Story"), 4));
 
             String expected = "" +
                 "Rental Record for Bob\n" +
@@ -24,17 +20,17 @@ namespace Kata.Tests.MovieRental
                 "Amount owed is 14\n" +
                 "You earned 5 frequent renter points";
 
-            Assert.Equal(expected, customer.TextStatement());
+            Assert.Equal(expected, customer.Statement(new TextStatementFormatter()));
         }
 
         [Fact]
-        public void ShouldRentalHtmlStatement()
+        public void ShouldRentalHtmlStatementFormat()
         {
             Customer customer = new Customer("Bob");
-            customer.addRental(new Rental(new RegularMovie("Jaws"), 2));
-            customer.addRental(new Rental(new NewReleaseMovie("Short New"), 1));
-            customer.addRental(new Rental(new NewReleaseMovie("Long New"), 2));
-            customer.addRental(new Rental(new ChildrensMovie("Toy Story"), 4));
+            customer.AddRental(new Rental(new RegularMovie("Jaws"), 2));
+            customer.AddRental(new Rental(new NewReleaseMovie("Short New"), 1));
+            customer.AddRental(new Rental(new NewReleaseMovie("Long New"), 2));
+            customer.AddRental(new Rental(new ChildrensMovie("Toy Story"), 4));
 
             string expected = "" +
                 "<h1>Rental Record for <em>Bob</em></h1>" +
@@ -47,7 +43,7 @@ namespace Kata.Tests.MovieRental
                 "<p>Amount owed is <em>14</em></p>" +
                 "<p>You earned <em>5</em> frequent renter points</p>";
 
-            Assert.Equal(expected, customer.HtmlStatement());
+            Assert.Equal(expected, customer.Statement(new HtmlStatementFormatter()));
         }
     }
 }
