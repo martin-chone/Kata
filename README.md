@@ -3,6 +3,8 @@
 Ce dépôt contient une collection de katas classiques implémentés en **C#** selon les principes du **TDD (Test-Driven Development)**.  
 Chaque kata est structuré de manière indépendante, avec son code de production et ses tests associés.
 
+Chaque kata est accompagné d’un README contenant l’énoncé ou un lien vers celui-ci.
+
 ---
 
 ## ✅ Katas disponibles
