@@ -1,14 +1,17 @@
 ﻿using System.Text;
 using System.Text.Json;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 
 namespace Kata.Tests.MovieRental
 {
-    public interface IStatementFormatter
+    public interface IStatementFormatter<out T>
     {
-        string Format(StatementDTO dto);
+        T Format(StatementDTO dto);
     }
 
-    public class TextStatementFormatter : IStatementFormatter
+    public class TextStatementFormatter : IStatementFormatter<string>
     {
         public string Format(StatementDTO dto)
         {
@@ -28,7 +31,7 @@ namespace Kata.Tests.MovieRental
         }
     }
 
-    public class HtmlStatementFormatter : IStatementFormatter
+    public class HtmlStatementFormatter : IStatementFormatter<string>
     {
         public string Format(StatementDTO dto)
         {
@@ -50,11 +53,69 @@ namespace Kata.Tests.MovieRental
         }
     }
 
-    public class JsonStatementFormatter : IStatementFormatter
+    public class JsonStatementFormatter : IStatementFormatter<string>
     {
         public string Format(StatementDTO dto)
         {
             return JsonSerializer.Serialize(dto);
+        }
+    }
+
+    public class PdfStatementFormatter : IStatementFormatter<byte[]>
+    {
+        public byte[] Format(StatementDTO dto)
+        {
+            QuestPDF.Settings.License = LicenseType.Community;
+
+            var document = Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Margin(50);
+                    page.Size(PageSizes.A4);
+                    page.PageColor(Colors.White);
+                    page.DefaultTextStyle(x => x.FontSize(12));
+
+                    page.Header()
+                        .Text($"Rental Record for {dto.CustomerName}")
+                        .FontSize(20)
+                        .Bold();
+
+                    page.Content().Table(table =>
+                    {
+                        table.ColumnsDefinition(columns =>
+                        {
+                            columns.RelativeColumn();
+                            columns.ConstantColumn(100);
+                        });
+
+                        // En-tête
+                        table.Header(header =>
+                        {
+                            header.Cell().Element(CellStyle).Text("Movie Title").Bold();
+                            header.Cell().Element(CellStyle).AlignRight().Text("Amount").Bold();
+                        });
+
+                        // Contenu
+                        foreach (var rental in dto.Rentals)
+                        {
+                            table.Cell().Element(CellStyle).Text(rental.MovieTitle);
+                            table.Cell().Element(CellStyle).AlignRight().Text($"{rental.Amount:0.00}");
+                        }
+
+                        static IContainer CellStyle(IContainer container) =>
+                            container.PaddingVertical(5).BorderBottom(1).BorderColor(Colors.Grey.Lighten2);
+                    });
+
+                    page.Footer().Column(col =>
+                    {
+                        col.Item().Text($"Total amount: {dto.TotalAmount:0.00}").Bold();
+                        col.Item().Text($"Frequent renter points: {dto.FrequentRenterPoints}").Bold();
+                    });
+                });
+            });
+
+            return document.GeneratePdf();
         }
     }
 }

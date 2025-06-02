@@ -78,5 +78,21 @@ namespace Kata.Tests.MovieRental
             Assert.Equal(2, deserialized.Rentals[0].Amount);
 
         }
+
+        [Fact]
+        public void ShouldRentalPdfStatementFormat()
+        {
+            Customer customer = new Customer("Bob");
+            customer.AddRental(new Rental(new RegularMovie("Jaws"), 2));
+            customer.AddRental(new Rental(new NewReleaseMovie("Short New"), 1));
+            customer.AddRental(new Rental(new NewReleaseMovie("Long New"), 2));
+            customer.AddRental(new Rental(new ChildrensMovie("Toy Story"), 4));
+
+            var dto = customer.CreateStatement();
+            var pdf = new PdfStatementFormatter().Format(dto);
+
+            Assert.NotNull(pdf);
+            Assert.True(pdf.Length > 100);
+        }
     }
 }
