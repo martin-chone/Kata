@@ -17,27 +17,21 @@ namespace Kata.Tests.MovieRental
 
         public void AddRental(Rental rental) => _rentals.Add(rental);
 
-        public string Statement(IStatementFormatter formatter)
+        public StatementDTO CreateStatement()
         {
-            var sb = new StringBuilder();
-            formatter.Start(sb, Name);
-
-            double totalAmount = 0;
-            int frequentRenterPoints = 0;
+            var dto = new StatementDTO(Name);
 
             foreach (Rental rental in _rentals)
             {
                 var amount = rental.GetAmount();
-                frequentRenterPoints += rental.GetFrequentRenterPoints();
+                var points = rental.GetFrequentRenterPoints();
 
-                totalAmount += amount;
-
-                formatter.AddRental(sb, rental, amount);
+                dto.Rentals.Add(new StatementRentalLineDto(rental.Movie.Title, amount));
+                dto.TotalAmount += amount;
+                dto.FrequentRenterPoints += points;
             }
 
-            formatter.End(sb, totalAmount, frequentRenterPoints);
-
-            return sb.ToString();
+            return dto;
         }
     }
 }

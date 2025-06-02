@@ -23,7 +23,10 @@ namespace Kata.Tests.MovieRental
                 .Append("You earned 5 frequent renter points")
                 .ToString();
 
-            Assert.Equal(expected, customer.Statement(new TextStatementFormatter()));
+            var dto = customer.CreateStatement();
+            var text = new TextStatementFormatter().Format(dto);
+
+            Assert.Equal(expected, text);
         }
 
         [Fact]
@@ -46,7 +49,10 @@ namespace Kata.Tests.MovieRental
                 "<p>Amount owed is <em>14</em></p>" +
                 "<p>You earned <em>5</em> frequent renter points</p>";
 
-            Assert.Equal(expected, customer.Statement(new HtmlStatementFormatter()));
+            var dto = customer.CreateStatement();
+            var html = new HtmlStatementFormatter().Format(dto);
+
+            Assert.Equal(expected, html);
         }
     }
 }

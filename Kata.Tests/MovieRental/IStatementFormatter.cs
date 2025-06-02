@@ -4,48 +4,48 @@ namespace Kata.Tests.MovieRental
 {
     public interface IStatementFormatter
     {
-        void Start(StringBuilder sb, string customerName);
-        void AddRental(StringBuilder sb, Rental rental, double amount);
-        void End(StringBuilder sb, double totalAmount, int points);
+        string Format(StatementDTO dto);
     }
 
     public class TextStatementFormatter : IStatementFormatter
     {
-        public void Start(StringBuilder sb, string customerName)
+        public string Format(StatementDTO dto)
         {
-            sb.AppendLine($"Rental Record for {customerName}");
-        }
+            var sb = new StringBuilder();
 
-        public void AddRental(StringBuilder sb, Rental rental, double amount)
-        {
-            sb.AppendLine($"\t{rental.Movie.Title}\t{amount}");
-        }
+            sb.AppendLine($"Rental Record for {dto.CustomerName}");
 
-        public void End(StringBuilder sb, double totalAmount, int points)
-        {
-            sb.AppendLine($"Amount owed is {totalAmount}");
-            sb.Append($"You earned {points} frequent renter points");
+            foreach (var rental in dto.Rentals)
+            {
+                sb.AppendLine($"\t{rental.MovieTitle}\t{rental.Amount}");
+            }
+
+            sb.AppendLine($"Amount owed is {dto.TotalAmount}");
+            sb.Append($"You earned {dto.FrequentRenterPoints} frequent renter points");
+
+            return sb.ToString();
         }
     }
 
     public class HtmlStatementFormatter : IStatementFormatter
     {
-        public void Start(StringBuilder sb, string customerName)
+        public string Format(StatementDTO dto)
         {
-            sb.Append($"<h1>Rental Record for <em>{customerName}</em></h1>");
+            var sb = new StringBuilder();
+
+            sb.Append($"<h1>Rental Record for <em>{dto.CustomerName}</em></h1>");
             sb.Append("<table><tbody>");
-        }
 
-        public void AddRental(StringBuilder sb, Rental rental, double amount)
-        {
-            sb.Append($"<tr><td>{rental.Movie.Title}</td><td>{amount}</td></tr>");
-        }
+            foreach (var rental in dto.Rentals)
+            {
+                sb.Append($"<tr><td>{rental.MovieTitle}</td><td>{rental.Amount}</td></tr>");
+            }
 
-        public void End(StringBuilder sb, double totalAmount, int points)
-        {
             sb.Append("</tbody></table>");
-            sb.Append($"<p>Amount owed is <em>{totalAmount}</em></p>");
-            sb.Append($"<p>You earned <em>{points}</em> frequent renter points</p>");
+            sb.Append($"<p>Amount owed is <em>{dto.TotalAmount}</em></p>");
+            sb.Append($"<p>You earned <em>{dto.FrequentRenterPoints}</em> frequent renter points</p>");
+
+            return sb.ToString();
         }
     }
 }
