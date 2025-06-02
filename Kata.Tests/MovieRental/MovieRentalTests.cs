@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json;
 
 namespace Kata.Tests.MovieRental
 {
@@ -53,6 +54,29 @@ namespace Kata.Tests.MovieRental
             var html = new HtmlStatementFormatter().Format(dto);
 
             Assert.Equal(expected, html);
+        }
+
+        [Fact]
+        public void ShouldRentalJsonStatementFormat()
+        {
+            Customer customer = new Customer("Bob");
+            customer.AddRental(new Rental(new RegularMovie("Jaws"), 2));
+            customer.AddRental(new Rental(new NewReleaseMovie("Short New"), 1));
+            customer.AddRental(new Rental(new NewReleaseMovie("Long New"), 2));
+            customer.AddRental(new Rental(new ChildrensMovie("Toy Story"), 4));
+
+            var dto = customer.CreateStatement();
+            var json = new JsonStatementFormatter().Format(dto);
+
+            var deserialized = JsonSerializer.Deserialize<StatementDTO>(json);
+
+            Assert.Equal("Bob", deserialized.CustomerName);
+            Assert.Equal(14, deserialized.TotalAmount);
+            Assert.Equal(5, deserialized.FrequentRenterPoints);
+            Assert.Equal(4, deserialized.Rentals.Count);
+            Assert.Equal("Jaws", deserialized.Rentals[0].MovieTitle);
+            Assert.Equal(2, deserialized.Rentals[0].Amount);
+
         }
     }
 }

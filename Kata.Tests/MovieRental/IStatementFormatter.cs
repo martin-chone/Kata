@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Text.Json;
 
 namespace Kata.Tests.MovieRental
 {
@@ -46,6 +47,14 @@ namespace Kata.Tests.MovieRental
             sb.Append($"<p>You earned <em>{dto.FrequentRenterPoints}</em> frequent renter points</p>");
 
             return sb.ToString();
+        }
+    }
+
+    public class JsonStatementFormatter : IStatementFormatter
+    {
+        public string Format(StatementDTO dto)
+        {
+            return JsonSerializer.Serialize(dto);
         }
     }
 }

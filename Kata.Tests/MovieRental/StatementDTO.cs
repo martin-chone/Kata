@@ -3,7 +3,7 @@
     public class StatementDTO
     {
         public string CustomerName { get; private set; }
-        public IList<StatementRentalLineDto> Rentals { get; private set; }
+        public IList<StatementRentalLineDto> Rentals { get; set; }
         public double TotalAmount { get; set; }
         public int FrequentRenterPoints { get; set; }
 
