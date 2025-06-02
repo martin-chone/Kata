@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace Kata.Tests.MovieRental
 {
     public class MovieRentalTests
@@ -11,14 +13,15 @@ namespace Kata.Tests.MovieRental
             customer.AddRental(new Rental(new NewReleaseMovie("Long New"), 2));
             customer.AddRental(new Rental(new ChildrensMovie("Toy Story"), 4));
 
-            String expected = "" +
-                "Rental Record for Bob\n" +
-                "\tJaws\t2\n" +
-                "\tShort New\t3\n" +
-                "\tLong New\t6\n" +
-                "\tToy Story\t3\n" +
-                "Amount owed is 14\n" +
-                "You earned 5 frequent renter points";
+            var expected = new StringBuilder()
+                .AppendLine("Rental Record for Bob")
+                .AppendLine("\tJaws\t2")
+                .AppendLine("\tShort New\t3")
+                .AppendLine("\tLong New\t6")
+                .AppendLine("\tToy Story\t3")
+                .AppendLine("Amount owed is 14")
+                .Append("You earned 5 frequent renter points")
+                .ToString();
 
             Assert.Equal(expected, customer.Statement(new TextStatementFormatter()));
         }
@@ -34,12 +37,12 @@ namespace Kata.Tests.MovieRental
 
             string expected = "" +
                 "<h1>Rental Record for <em>Bob</em></h1>" +
-                "<table>" +
+                "<table><tbody>" +
                   "<tr><td>Jaws</td><td>2</td></tr>" +
                   "<tr><td>Short New</td><td>3</td></tr>" +
                   "<tr><td>Long New</td><td>6</td></tr>" +
                   "<tr><td>Toy Story</td><td>3</td></tr>" +
-                "</table>" +
+                "</tbody></table>" +
                 "<p>Amount owed is <em>14</em></p>" +
                 "<p>You earned <em>5</em> frequent renter points</p>";
 

@@ -4,26 +4,26 @@ namespace Kata.Tests.MovieRental
 {
     public interface IStatementFormatter
     {
-        public void Start(StringBuilder sb, string customerName);
-        public void AddRental(StringBuilder sb, Rental rental, double amount);
-        public void End(StringBuilder sb, double totalAmount, int points);
+        void Start(StringBuilder sb, string customerName);
+        void AddRental(StringBuilder sb, Rental rental, double amount);
+        void End(StringBuilder sb, double totalAmount, int points);
     }
 
     public class TextStatementFormatter : IStatementFormatter
     {
         public void Start(StringBuilder sb, string customerName)
         {
-            sb.Append($"Rental Record for {customerName}\n");
+            sb.AppendLine($"Rental Record for {customerName}");
         }
 
         public void AddRental(StringBuilder sb, Rental rental, double amount)
         {
-            sb.Append($"\t{rental.Movie.Title}\t{amount}\n");
+            sb.AppendLine($"\t{rental.Movie.Title}\t{amount}");
         }
 
         public void End(StringBuilder sb, double totalAmount, int points)
         {
-            sb.Append($"Amount owed is {totalAmount}\n");
+            sb.AppendLine($"Amount owed is {totalAmount}");
             sb.Append($"You earned {points} frequent renter points");
         }
     }
@@ -33,7 +33,7 @@ namespace Kata.Tests.MovieRental
         public void Start(StringBuilder sb, string customerName)
         {
             sb.Append($"<h1>Rental Record for <em>{customerName}</em></h1>");
-            sb.Append("<table>");
+            sb.Append("<table><tbody>");
         }
 
         public void AddRental(StringBuilder sb, Rental rental, double amount)
@@ -43,7 +43,7 @@ namespace Kata.Tests.MovieRental
 
         public void End(StringBuilder sb, double totalAmount, int points)
         {
-            sb.Append("</table>");
+            sb.Append("</tbody></table>");
             sb.Append($"<p>Amount owed is <em>{totalAmount}</em></p>");
             sb.Append($"<p>You earned <em>{points}</em> frequent renter points</p>");
         }
