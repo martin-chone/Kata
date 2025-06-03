@@ -5,9 +5,9 @@
         [Theory]
         [InlineData(3)]
         [InlineData(6)]
-        [InlineData(9)]
-        [InlineData(12)]
-        public void ShouldFizzWhenMultipleOfThreeOnly(int input)
+        [InlineData(13)]
+        [InlineData(31)]
+        public void ShouldFizzWhenMultipleOfThreeOrContainsThreeOnly(int input)
         {
             Assert.Equal("Fizz", FizzBuzz.Convert(input));
         }
@@ -15,9 +15,9 @@
         [Theory]
         [InlineData(5)]
         [InlineData(10)]
-        [InlineData(20)]
-        [InlineData(25)]
-        public void ShouldBuzzWhenMultipleOfFiveOnly(int input)
+        [InlineData(52)]
+        [InlineData(59)]
+        public void ShouldBuzzWhenMultipleOfFiveOrContainsFiveOnly(int input)
         {
             Assert.Equal("Buzz", FizzBuzz.Convert(input));
         }
@@ -25,9 +25,9 @@
         [Theory]
         [InlineData(15)]
         [InlineData(30)]
-        [InlineData(45)]
-        [InlineData(60)]
-        public void ShouldFizzBuzzWhenMultipleOfThreeAndFive(int input)
+        [InlineData(35)]
+        [InlineData(53)]
+        public void ShouldFizzBuzzWhenMultipleOfThreeAndFiveOrContainsThreeAndFive(int input)
         {
             Assert.Equal("FizzBuzz", FizzBuzz.Convert(input));
         }
@@ -37,7 +37,7 @@
         [InlineData(2)]
         [InlineData(4)]
         [InlineData(7)]
-        public void ShouldNumberWhenNotMultipleOfThreeOrFive(int input)
+        public void ShouldNumberWhenNoRuleMatches(int input)
         {
             Assert.Equal(input.ToString(), FizzBuzz.Convert(input));
         }

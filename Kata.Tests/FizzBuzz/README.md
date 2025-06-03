@@ -36,7 +36,7 @@ Approche simple et itérative, en partant des cas les plus simples vers les comb
 - 90 → "FizzBuzz" (Divisibles par 3 et 5)
 
 - 43 → "Fizz" (Contient un 3)
-- 154 → "Buzz" (Contient un 5)
+- 52 → "Buzz" (Contient un 5)
 
 - 15 → "FizzBuzz" (Divisibles par 3, divisibles par 5 et contient un 5)
 - 135 → "FizzBuzz" (Divisibles par 3, divisibles par 5, contient un 3 et contient un 5)
