@@ -6,15 +6,14 @@ FizzBuzz est un jeu de chiffres simple dans lequel vous comptez, mais remplacez 
 
 ## 🔗 Énoncé
 
-Créez un convertisseur qui imprime les chiffres de 1 à 100, séparés par des sauts de ligne.
+Commencer par créer un convertisseur qui imprime les chiffres de 1 à 200.
 - Au lieu de nombres divisibles par 3, la méthode devrait produire « Fizz ».
 - Au lieu de nombres divisibles par 5, la méthode devrait produire « Buzz ».
 - Au lieu de nombres divisibles par 3 et 5, la méthode devrait afficher « FizzBuzz ».
 
-Il y a une étape suivante : 
-- Au lieu de chiffres contenant un trois, imprimez « Fizz ».
-- Au lieu de chiffres avec un cinq, imprimez « Buzz ».
-- Au lieu de chiffres contenant un trois et un cinq, imprimez « FizzBuzz ».
+Puis passer à la nouvelle exigence : 
+- Au lieu de nombres divisibles par 3 ou qui contient 3, la méthode devrait produire « Fizz ».
+- Au lieu de nombres divisibles par 5 ou qui contient 5, la méthode devrait produire « Buzz ».
 
 ## 🧠 Approche adoptée
 
@@ -23,9 +22,24 @@ Approche simple et itérative, en partant des cas les plus simples vers les comb
 ## ✅ Exemple(s) de test
 
 - 1 → "1"
-- 3 → "FizzFizz" (Divisibles par 3 et contient un 3)
-- 5 → "BuzzBuzz" (Divisibles par 5 et contient un 5)
-- 15 → "FizzBuzzBuzz" (Divisibles par 3, divisibles par 5 et contient un 5)
+- 2 → "2"
+
+- 3 → "Fizz" (Divisibles par 3 et contient un 3)
+- 6 → "Fizz" (Divisibles par 3)
+- 9 → "Fizz" (Divisibles par 3)
+
+- 5 → "Buzz" (Divisibles par 5 et contient un 5)
+- 10 → "Buzz" (Divisibles par 5)
+- 20 → "Buzz" (Divisibles par 5)
+
+- 60 → "FizzBuzz" (Divisibles par 3 et 5)
+- 90 → "FizzBuzz" (Divisibles par 3 et 5)
+
+- 43 → "Fizz" (Contient un 3)
+- 154 → "Buzz" (Contient un 5)
+
+- 15 → "FizzBuzz" (Divisibles par 3, divisibles par 5 et contient un 5)
+- 135 → "FizzBuzz" (Divisibles par 3, divisibles par 5, contient un 3 et contient un 5)
 
 ## 🧪 Tests
 

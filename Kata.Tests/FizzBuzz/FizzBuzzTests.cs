@@ -3,24 +3,43 @@
     public class FizzBuzzTests
     {
         [Theory]
-        [InlineData(1, "1")]
-        [InlineData(2, "2")]
-        [InlineData(3, "FizzFizz")]
-        [InlineData(4, "4")]
-        [InlineData(5, "BuzzBuzz")]
-        [InlineData(8, "8")]
-        [InlineData(9, "Fizz")]
-        [InlineData(10, "Buzz")]
-        [InlineData(11, "11")]
-        [InlineData(13, "Fizz")]
-        [InlineData(15, "FizzBuzzBuzz")]
-        public void Convert_ReturnsExpectedResult(int input, string expected)
+        [InlineData(3)]
+        [InlineData(6)]
+        [InlineData(9)]
+        [InlineData(12)]
+        public void ShouldFizzWhenMultipleOfThreeOnly(int input)
         {
-            var converter = new FizzBuzzConverter();
+            Assert.Equal("Fizz", FizzBuzz.Convert(input));
+        }
 
-            string result = converter.Convert(input);
+        [Theory]
+        [InlineData(5)]
+        [InlineData(10)]
+        [InlineData(20)]
+        [InlineData(25)]
+        public void ShouldBuzzWhenMultipleOfFiveOnly(int input)
+        {
+            Assert.Equal("Buzz", FizzBuzz.Convert(input));
+        }
 
-            Assert.Equal(expected, result);
+        [Theory]
+        [InlineData(15)]
+        [InlineData(30)]
+        [InlineData(45)]
+        [InlineData(60)]
+        public void ShouldFizzBuzzWhenMultipleOfThreeAndFive(int input)
+        {
+            Assert.Equal("FizzBuzz", FizzBuzz.Convert(input));
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(4)]
+        [InlineData(7)]
+        public void ShouldNumberWhenNotMultipleOfThreeOrFive(int input)
+        {
+            Assert.Equal(input.ToString(), FizzBuzz.Convert(input));
         }
     }
 }
