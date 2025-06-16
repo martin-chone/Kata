@@ -33,6 +33,8 @@ Comprend plusieurs approches :
 
 ### 8. [MovieRental](./Kata.Tests/MovieRental/)
 
+### 9. [Mastermind](./Kata.Tests/Mastermind/)
+
 ---
 
 ## 🧪 Approche TDD
